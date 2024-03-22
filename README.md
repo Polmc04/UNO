@@ -3,12 +3,31 @@ UNO
 
 Version 1
 
-Version 1 generada por Emmanuel Alonso Mendoza Cobeña
-Versión 1 verificada por Pol Miró
-Versión 1 comunicada por Joan Fusté
+generada por Emmanuel Alonso Mendoza Cobeña
+verificada por Pol Miró
+comunicada por Joan Fusté
 URL: https://www.youtube.com/watch?v=ju_lTH3MJwU
 
-0/ para desconectar
-1/ para Sign up
-2/ para Log in
-3/ para Remove account
+Version 2
+
+generada por Pol Miró
+
+
+Pendiente (Requisitos a implementar en esta versión)
+
+-Exclusión mutua
+
+-Implementar interfaz gráfica (añadir cartas del cliente)
+
+Avances (Requisitos del proyecto):
+
+-
+
+Mejoras (Arreglo de bugs, mejoras estéticas...):
+
+-Robustez cliente. Al conectar 2 veces el servidor no funcionaba bien
+
+Errores detectados:
+
+-
+

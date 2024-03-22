@@ -39,22 +39,42 @@ int main(int argc, char *argv[])
 	char peticion[512];
 	char respuesta[512];
 	// Iniciamos el socket
-	if ((sock_listen = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-		printf("Error creant socket");
+	if ((sock_listen = socket(AF_INET, SOCK_STREAM, 0)) < 0) printf("Error creant socket");
 	
-	// Fem el bind al port
-	memset(&serv_adr, 0, sizeof(serv_adr));// inicialitza a zero serv_addr
+	// Bind al puerto
+
+	memset(&serv_adr, 0, sizeof(serv_adr)); // inicialitza a zero serv_addr
 	serv_adr.sin_family = AF_INET;
 	
 	// asocia el socket a cualquiera de las IP de la maquina. 
 	// htonl formatea el numero que recibe al formato necesario
 	serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
-	// establecemos el puerto de escucha
+	
+	// Establecemos el puerto de escucha
 	serv_adr.sin_port = htons(9050);
-	if (bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr)) < 0)
-		printf ("Error al bind");
-	if (listen(sock_listen, 3) < 0)
-		printf("Error en el Listen");
+	
+	// Forzamos el puerto, si no estï¿½ en uso anteriormente salta error con el comando fuser
+	bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr));
+	
+	// Reiniciamos el puerto de escucha
+
+    const char *comando = "fuser -k 9050/tcp";
+
+    // Ejecutar el comando
+    int resultado = system(comando);
+
+    // Verificar si la ejecucion fue exitosa
+
+    if (resultado == -1) {
+        perror("Error al ejecutar el comando");
+    } else {
+        printf("Puerto 9050 en TCP liberado.\n");
+    }
+
+	//Bind
+
+	if (bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr)) < 0) printf ("Posible error al bind\n");
+	if (listen(sock_listen, 3) < 0) printf("Error en el Listen");
 	
 	int i;
 	// Bucle infinito
@@ -202,7 +222,7 @@ int main(int argc, char *argv[])
 						sprintf(respuesta, "1");
 					}else
 					{
-						printf("Contraseña incorrecta");
+						printf("Contraseï¿½a incorrecta");
 						sprintf(respuesta, "2");
 					}
 				}
@@ -248,7 +268,7 @@ int main(int argc, char *argv[])
 						}
 						
 					}else{
-						printf("las contraseñas no coinciden");
+						printf("las contraseï¿½as no coinciden");
 						sprintf(respuesta,"2");
 					}
 				}
@@ -288,7 +308,7 @@ int main(int argc, char *argv[])
 					
 					
 					
-					sprintf (respuesta,"%s Es el jugador con mas partidas, con un total de %d",nombre, max);
+					sprintf (respuesta,"%s es el jugador con mas partidas, con un total de %d",nombre, max);
 					
 				}	
 			}else if(codigo == 5)
@@ -343,7 +363,6 @@ int main(int argc, char *argv[])
 		}
 		// Se acabo el servicio para este cliente
 		close(sock_conn); 
-	
-		}
+	}
 	
 }
