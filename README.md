@@ -15,19 +15,22 @@ generada por Pol Miró
 
 Pendiente (Requisitos a implementar en esta versión)
 
--Exclusión mutua
-
 -Implementar interfaz gráfica (añadir cartas del cliente)
+
+-Lista conectados
 
 Avances (Requisitos del proyecto):
 
--
+-Exlusión mutua
 
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
--Robustez cliente. Al conectar 2 veces el servidor no funcionaba bien
+-Cambio base de datos y querys más eficientes
+
+-Remove Clientes Arreglado
 
 Errores detectados:
 
--
+-Si no te conectas al pulsar send crashea el cliente
+
 
