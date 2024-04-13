@@ -21,16 +21,18 @@ Pendiente (Requisitos a implementar en esta versión)
 
 Avances (Requisitos del proyecto):
 
--Exlusión mutua
+-
 
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
--Cambio base de datos y querys más eficientes
+-Cambio base de datos
 
--Remove Clientes Arreglado
+-Encriptación de Password desde cliente
+
+-Arreglo crasheo de cliente cuando pulsas Send si no te conectas
 
 Errores detectados:
 
--Si no te conectas al pulsar send crashea el cliente
+-
 
 

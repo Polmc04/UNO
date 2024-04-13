@@ -49,7 +49,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(24, 58);
+            this.label2.Location = new System.Drawing.Point(24, 29);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 24);
             this.label2.TabIndex = 1;
@@ -57,7 +57,7 @@
             // 
             // nombre
             // 
-            this.nombre.Location = new System.Drawing.Point(165, 63);
+            this.nombre.Location = new System.Drawing.Point(169, 34);
             this.nombre.Name = "nombre";
             this.nombre.Size = new System.Drawing.Size(164, 20);
             this.nombre.TabIndex = 3;
@@ -76,9 +76,9 @@
             // Send
             // 
             this.Send.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Send.Location = new System.Drawing.Point(362, 246);
+            this.Send.Location = new System.Drawing.Point(241, 157);
             this.Send.Name = "Send";
-            this.Send.Size = new System.Drawing.Size(128, 44);
+            this.Send.Size = new System.Drawing.Size(94, 39);
             this.Send.TabIndex = 5;
             this.Send.Text = "Send";
             this.Send.UseVisualStyleBackColor = true;
@@ -97,7 +97,7 @@
             this.groupBox1.Controls.Add(this.nombre);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(496, 297);
+            this.groupBox1.Size = new System.Drawing.Size(341, 204);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Peticion";
@@ -106,7 +106,7 @@
             // 
             this.Remove.AutoSize = true;
             this.Remove.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Remove.Location = new System.Drawing.Point(28, 246);
+            this.Remove.Location = new System.Drawing.Point(28, 165);
             this.Remove.Name = "Remove";
             this.Remove.Size = new System.Drawing.Size(189, 24);
             this.Remove.TabIndex = 11;
@@ -116,7 +116,7 @@
             // 
             // password
             // 
-            this.password.Location = new System.Drawing.Point(165, 106);
+            this.password.Location = new System.Drawing.Point(170, 60);
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(164, 20);
             this.password.TabIndex = 10;
@@ -126,7 +126,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(24, 106);
+            this.label1.Location = new System.Drawing.Point(24, 60);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(92, 24);
             this.label1.TabIndex = 9;
@@ -136,7 +136,7 @@
             // 
             this.LogIn.AutoSize = true;
             this.LogIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LogIn.Location = new System.Drawing.Point(28, 214);
+            this.LogIn.Location = new System.Drawing.Point(28, 135);
             this.LogIn.Name = "LogIn";
             this.LogIn.Size = new System.Drawing.Size(72, 24);
             this.LogIn.TabIndex = 7;
@@ -148,7 +148,7 @@
             // 
             this.SingUp.AutoSize = true;
             this.SingUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SingUp.Location = new System.Drawing.Point(28, 182);
+            this.SingUp.Location = new System.Drawing.Point(28, 105);
             this.SingUp.Name = "SingUp";
             this.SingUp.Size = new System.Drawing.Size(88, 24);
             this.SingUp.TabIndex = 8;
@@ -170,7 +170,7 @@
             // MasPartidas
             // 
             this.MasPartidas.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MasPartidas.Location = new System.Drawing.Point(1552, 212);
+            this.MasPartidas.Location = new System.Drawing.Point(12, 231);
             this.MasPartidas.Name = "MasPartidas";
             this.MasPartidas.Size = new System.Drawing.Size(147, 79);
             this.MasPartidas.TabIndex = 11;
@@ -181,7 +181,7 @@
             // MasELO
             // 
             this.MasELO.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MasELO.Location = new System.Drawing.Point(1552, 300);
+            this.MasELO.Location = new System.Drawing.Point(12, 319);
             this.MasELO.Name = "MasELO";
             this.MasELO.Size = new System.Drawing.Size(147, 79);
             this.MasELO.TabIndex = 12;
@@ -192,7 +192,7 @@
             // ColorCarta
             // 
             this.ColorCarta.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ColorCarta.Location = new System.Drawing.Point(1552, 391);
+            this.ColorCarta.Location = new System.Drawing.Point(12, 410);
             this.ColorCarta.Name = "ColorCarta";
             this.ColorCarta.Size = new System.Drawing.Size(147, 79);
             this.ColorCarta.TabIndex = 13;

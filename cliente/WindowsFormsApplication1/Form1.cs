@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
 using System.Collections;
+using System.Security.Cryptography;
+
 
 namespace WindowsFormsApplication1
 {
@@ -48,61 +50,91 @@ namespace WindowsFormsApplication1
             }
             else MessageBox.Show("Ya estabas conectado!");
         }
+        static string ObtenerHashSHA256(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                // Convertir la contraseña en una matriz de bytes
+                byte[] bytes = Encoding.UTF8.GetBytes(password);
+
+                // Calcular el hash SHA256 de los bytes
+                byte[] hashBytes = sha256.ComputeHash(bytes);
+
+                // Convertir el hash en una cadena de caracteres hexadecimal
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+
+                return sb.ToString();
+            }
+        }
         private void Send_Click(object sender, EventArgs e)
         {
-            if (SingUp.Checked)
+            if (conectado)
             {
-                // Construimos y enviamos mensaje
-                string mensaje = "1/" + nombre.Text + "/" + password.Text;
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
+                // Encriptamos el password
+                string passwordEncriptado = ObtenerHashSHA256(password.Text).Substring(0, 10);
 
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                if (SingUp.Checked)
+                {
+                    // Construimos y enviamos mensaje
+                    string mensaje = "1/" + nombre.Text + "/" + passwordEncriptado;
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+
+                    //Recibimos la respuesta del servidor
+                    byte[] msg2 = new byte[80];
+                    server.Receive(msg2);
+                    mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
 
 
-                if (mensaje == "1") // 1 si el server ha podido registrarlo
-                    MessageBox.Show("Succesfully registered!" + Carita);
-                else if (mensaje == "2")
-                    MessageBox.Show("Unable to create account, user " + nombre.Text + " alredy exists");
+                    if (mensaje == "1") // 1 si el server ha podido registrarlo
+                        MessageBox.Show("Succesfully registered!" + Carita);
+                    else if (mensaje == "2")
+                        MessageBox.Show("Unable to create account, user " + nombre.Text + " alredy exists");
+                }
+                else if (LogIn.Checked)
+                {
+                    string mensaje = "2/" + nombre.Text + "/" + passwordEncriptado;
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+
+                    //Recibimos la respuesta del servidor
+                    byte[] msg2 = new byte[80];
+                    server.Receive(msg2);
+                    mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                    if (mensaje == "1") // 1 si el server ha podido logearlo
+                        MessageBox.Show("Logged In! " + Carita);
+                    else if (mensaje == "2")
+                        MessageBox.Show("Unable to Log In, password does not match!");
+                    else if (mensaje == "3")
+                        MessageBox.Show("Unable to Log In, user " + nombre.Text + " does not exist. Try to Sing Up!");
+
+                }
+                else if (Remove.Checked)
+                {
+                    // Enviamos peticion eliminar cuenta
+                    string mensaje = "3/" + nombre.Text + "/" + passwordEncriptado;
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+
+                    //Recibimos la respuesta del servidor
+                    byte[] msg2 = new byte[80];
+                    server.Receive(msg2);
+                    mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                    if (mensaje == "1") // 1 si el server ha podido eliminar la cuenta
+                        MessageBox.Show("Account deleted " + Carita);
+                    else if (mensaje == "2")
+                        MessageBox.Show("Password does not match!");
+                    else if (mensaje == "3")
+                        MessageBox.Show("User " + nombre.Text + " does not exist.");
+                }
             }
-            else if (LogIn.Checked)
+            else
             {
-                string mensaje = "2/" + nombre.Text + "/" + password.Text;
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split ('\0')[0];
-                if (mensaje == "1") // 1 si el server ha podido logearlo
-                    MessageBox.Show("Logged In! " + Carita);
-                else if (mensaje == "2")
-                    MessageBox.Show("Unable to Log In, password does not match!");
-                else if (mensaje == "3")
-                    MessageBox.Show("Unable to Log In, user " + nombre.Text + " does not exist. Try to Sing Up!");
-
-            }
-            else if(Remove.Checked)
-            {
-                // Enviamos peticion eliminar cuenta
-                string mensaje = "3/" + nombre.Text + "/" + password.Text;
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                if (mensaje == "1") // 1 si el server ha podido eliminar la cuenta
-                    MessageBox.Show("Account deleted " + Carita);
-                else if (mensaje == "2")
-                    MessageBox.Show("Password does not match!");
-                else if (mensaje == "3")
-                    MessageBox.Show("User " + nombre.Text + " does not exist.");
+                MessageBox.Show("You must be connected in order to Send messages to the server");
             }
         }
         private void Disconnect_Click(object sender, EventArgs e)
