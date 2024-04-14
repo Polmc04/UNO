@@ -17,22 +17,23 @@ Pendiente (Requisitos a implementar en esta versión)
 
 -Implementar interfaz gráfica (añadir cartas del cliente)
 
--Lista conectados
 
 Avances (Requisitos del proyecto):
 
--
+-Lista conectados
 
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
--Cambio base de datos
+-Arreglo query COUNT Jugadores
 
--Encriptación de Password desde cliente
+-Arreglo crasheos del cliente si mandas querys y no te conectas antes
 
--Arreglo crasheo de cliente cuando pulsas Send si no te conectas
+-Arreglo y optimización querys del cliente
+
+-Imagenes de cartas
 
 Errores detectados:
 
--
+-La conexión entre cliente y servidor no funciona a la primera, hay que reiniciar para que funcione a veces
 
 

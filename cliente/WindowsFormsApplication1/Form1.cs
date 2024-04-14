@@ -139,61 +139,119 @@ namespace WindowsFormsApplication1
         }
         private void Disconnect_Click(object sender, EventArgs e)
         {
-            //Mensaje de desconexión
-            string mensaje = "0/";
-        
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-            server.Send(msg);
+            if (conectado)
+            {
+                //Mensaje de desconexión
+                string mensaje = "0/";
 
-            // Nos desconectamos
-            this.BackColor = Color.Gray;
-            server.Shutdown(SocketShutdown.Both);
-            server.Close();
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
 
-            conectado = false;
+                // Nos desconectamos
+                this.BackColor = Color.Gray;
+                server.Shutdown(SocketShutdown.Both);
+                server.Close();
+
+                conectado = false;
+
+            }
+            else
+            {
+                MessageBox.Show("You must be connected in order to Send messages to the server");
+            }
         }
 
         private void MasPartidas_Click(object sender, EventArgs e)
         {
-            string mensaje = "4/";
+            if (conectado)
+            {
+                string mensaje = "4/";
 
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-            server.Send(msg);
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
 
-            //Recibimos el mensaje del servidor; 
-            byte[] msg2 = new byte[80];
-            server.Receive(msg2);
-            mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-            MessageBox.Show(mensaje);
+                //Recibimos el mensaje del servidor; 
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                MessageBox.Show(mensaje);
 
+            }
+            else
+            {
+                MessageBox.Show("You must be connected in order to Send messages to the server");
+            }
         }
 
         private void MasELO_Click(object sender, EventArgs e)
         {
-            string mensaje = "5/";
+            if (conectado)
+            {
+                string mensaje = "5/";
 
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-            server.Send(msg);
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
 
-            //Recibimos el mensaje del servidor; 
-            byte[] msg2 = new byte[80];
-            server.Receive(msg2);
-            mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-            MessageBox.Show(mensaje);
+                //Recibimos el mensaje del servidor; 
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                MessageBox.Show(mensaje);
+            }
+            else
+            {
+                MessageBox.Show("You must be connected in order to Send messages to the server");
+            }
         }
 
         private void ColorCarta_Click(object sender, EventArgs e)
         {
-            string mensaje = "6/";
+            if (conectado)
+            {
+                string mensaje = "6/";
 
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-            server.Send(msg);
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
 
-            //Recibimos el mensaje del servidor; 
-            byte[] msg2 = new byte[80];
-            server.Receive(msg2);
-            mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-            MessageBox.Show(mensaje);
+                //Recibimos el mensaje del servidor; 
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                MessageBox.Show(mensaje);
+            }
+            else
+            {
+                MessageBox.Show("You must be connected in order to Send messages to the server");
+            }
+        }
+
+        private void DimeConectados_Click(object sender, EventArgs e)
+        {
+            if (conectado)
+            {
+                string mensaje = "7/";
+
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+
+                //Recibimos el mensaje del servidor; 
+                byte[] msg2 = new byte[800];
+                server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                string[] partes = mensaje.Split('/');
+                int numConectados = int.Parse(partes[0]);
+                string nombres = "";
+                for (int i = 1; i <= numConectados; i++)
+                {
+                    // Agregar cada nombre a la cadena de nombres
+                    nombres += partes[i] + Environment.NewLine;
+                }
+                MessageBox.Show("Hay " + numConectados + " jugadores conectados: " + Environment.NewLine + nombres);
+            }
+            else
+            {
+                MessageBox.Show("You must be connected in order to Send messages to the server");
+            }
         }
     }
 }

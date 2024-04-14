@@ -42,6 +42,7 @@
             this.MasPartidas = new System.Windows.Forms.Button();
             this.MasELO = new System.Windows.Forms.Button();
             this.ColorCarta = new System.Windows.Forms.Button();
+            this.DimeConectados = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -181,7 +182,7 @@
             // MasELO
             // 
             this.MasELO.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MasELO.Location = new System.Drawing.Point(12, 319);
+            this.MasELO.Location = new System.Drawing.Point(12, 316);
             this.MasELO.Name = "MasELO";
             this.MasELO.Size = new System.Drawing.Size(147, 79);
             this.MasELO.TabIndex = 12;
@@ -192,7 +193,7 @@
             // ColorCarta
             // 
             this.ColorCarta.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ColorCarta.Location = new System.Drawing.Point(12, 410);
+            this.ColorCarta.Location = new System.Drawing.Point(12, 401);
             this.ColorCarta.Name = "ColorCarta";
             this.ColorCarta.Size = new System.Drawing.Size(147, 79);
             this.ColorCarta.TabIndex = 13;
@@ -200,11 +201,23 @@
             this.ColorCarta.UseVisualStyleBackColor = true;
             this.ColorCarta.Click += new System.EventHandler(this.ColorCarta_Click);
             // 
+            // DimeConectados
+            // 
+            this.DimeConectados.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DimeConectados.Location = new System.Drawing.Point(12, 486);
+            this.DimeConectados.Name = "DimeConectados";
+            this.DimeConectados.Size = new System.Drawing.Size(147, 79);
+            this.DimeConectados.TabIndex = 14;
+            this.DimeConectados.Text = "Dime Conectados";
+            this.DimeConectados.UseVisualStyleBackColor = true;
+            this.DimeConectados.Click += new System.EventHandler(this.DimeConectados_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1707, 844);
+            this.Controls.Add(this.DimeConectados);
             this.Controls.Add(this.ColorCarta);
             this.Controls.Add(this.MasELO);
             this.Controls.Add(this.MasPartidas);
@@ -235,6 +248,7 @@
         private System.Windows.Forms.Button MasPartidas;
         private System.Windows.Forms.Button MasELO;
         private System.Windows.Forms.Button ColorCarta;
+        private System.Windows.Forms.Button DimeConectados;
     }
 }
 
