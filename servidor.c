@@ -453,6 +453,26 @@ void *AtenderCliente(void *socket)
 			sprintf(respuesta, conectados);
 			printf(conectados);
 		}
+		else if (codigo == 8)
+		{
+			// Semilla para la generación de números aleatorios
+    		// Inicializar la semilla para el generador de números aleatorios
+    		static int semillaInicializada = 0;
+    		if (!semillaInicializada) 
+			{
+        		srand(time(NULL));
+        		semillaInicializada = 1;
+   			}
+
+    		// Generar un número aleatorio entre 0 y 52
+    		int rnd = rand() % 53;
+
+    		// Guardar el número aleatorio en Respuesta
+    		sprintf(respuesta, "%d", rnd);
+
+   			// Imprimir el número aleatorio guardado en el string
+    		printf("El numero aleatorio es: %s\n", respuesta);
+		}
 		if (codigo != 0)
 		{
 			printf ("Respuesta: %s\n", respuesta);

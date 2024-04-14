@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections;
 using System.Security.Cryptography;
+using System.IO;
 
 
 namespace WindowsFormsApplication1
@@ -134,7 +135,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                MessageBox.Show("You must be connected in order to Send messages to the server");
+                MessageBox.Show("You must be connected in order to send messages to the server");
             }
         }
         private void Disconnect_Click(object sender, EventArgs e)
@@ -157,7 +158,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                MessageBox.Show("You must be connected in order to Send messages to the server");
+                MessageBox.Show("You must be connected in order to send messages to the server");
             }
         }
 
@@ -179,7 +180,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                MessageBox.Show("You must be connected in order to Send messages to the server");
+                MessageBox.Show("You must be connected in order to send messages to the server");
             }
         }
 
@@ -200,7 +201,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                MessageBox.Show("You must be connected in order to Send messages to the server");
+                MessageBox.Show("You must be connected in order to send messages to the server");
             }
         }
 
@@ -221,24 +222,29 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                MessageBox.Show("You must be connected in order to Send messages to the server");
+                MessageBox.Show("You must be connected in order to send messages to the server");
             }
         }
+        public string[] DameConectados()
+        {
+            // Envia mensaje al server pidiendo la cantidad y nombre de conectados
+            string mensaje = "7/";
 
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+
+            //Recibimos el mensaje del servidor; 
+            byte[] msg2 = new byte[800];
+            server.Receive(msg2);
+            mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+            string[] partes = mensaje.Split('/');
+            return partes;
+        }
         private void DimeConectados_Click(object sender, EventArgs e)
         {
             if (conectado)
             {
-                string mensaje = "7/";
-
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-                //Recibimos el mensaje del servidor; 
-                byte[] msg2 = new byte[800];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                string[] partes = mensaje.Split('/');
+                string[] partes = DameConectados();
                 int numConectados = int.Parse(partes[0]);
                 string nombres = "";
                 for (int i = 1; i <= numConectados; i++)
@@ -250,7 +256,98 @@ namespace WindowsFormsApplication1
             }
             else
             {
-                MessageBox.Show("You must be connected in order to Send messages to the server");
+                MessageBox.Show("You must be connected in order to send messages to the server");
+            }
+        }
+        int DameCarta()
+        {
+            // Peticion al server de pedir una carta
+            int carta;
+            string mensaje = "8/";
+
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+
+            //Recibimos el mensaje del servidor; 
+            byte[] msg2 = new byte[80];
+            server.Receive(msg2);
+            mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+            return Convert.ToInt32(mensaje);
+        }
+        bool partidaEmpezada = false;
+        private void EmpezarPartida_Click(object sender, EventArgs e)
+        {
+            if (conectado && !partidaEmpezada)
+            {
+                partidaEmpezada = true;
+                labelYourCards.Visible = true; // Mostramos el label de las cartas del jugador
+                if (nombre.Text == string.Empty) labelYourCards.Text = labelYourCards.Text + " ( noname )";
+                else labelYourCards.Text = labelYourCards.Text + " (" + nombre.Text + ")";
+
+                // Repartimos Cartas
+                int[] cartas = new int[20]; // en este vector se guarda el id de la carta, max 20 cartas
+
+                for (int i = 0; i < 7; i++) // Se escogen 7 cartas iniciales al azar
+                {
+                    cartas[i] = DameCarta(); // Pedimos carta al server
+                    while (cartas[i] == 53 || cartas[i] == 40 || cartas[i] == 27 || cartas[i] == 14) // Aún no tenemos cartas 0
+                    {
+                        cartas[i] = DameCarta();
+                    }
+                }
+
+                // Mostramos al cliente las cartas que le han tocado
+                for (int i = 0; i < 7; i++)
+                {
+                    PictureBox pictureBox = new PictureBox();
+                    pictureBox.Location = new Point(i * 100 + 550, 600); // Alinear horizontalmente
+                    pictureBox.Size = new Size(80, 120); // Tamaño de la carta
+                    pictureBox.SizeMode = PictureBoxSizeMode.StretchImage; // Ajustar tamaño de imagen
+                    Controls.Add(pictureBox);
+
+                    // Cargar la imagen de la carta
+                    string rutaImagen = Path.Combine("Images", "cards", cartas[i] + ".png");
+                    if (File.Exists(rutaImagen))
+                    {
+                        pictureBox.Image = Image.FromFile(rutaImagen);
+                    }
+                    else
+                    {
+                        // Si la imagen no se encuentra, mostrar un mensaje en el PictureBox
+                        pictureBox.BackColor = Color.Gray;
+                        pictureBox.BorderStyle = BorderStyle.FixedSingle;
+                        pictureBox.Text = "Imagen no encontrada";
+                    }
+                }
+                /* ---------------------------------------------EN DESARROLLO--------------------------------------------------------------------
+                // Mostramos a los otros jugadores
+                string[] partes = DameConectados();
+                int numConectados = int.Parse(partes[0]); // Contamos cuantos hay conectados
+                string nombreUsuario = nombre.Text;
+                int pos = -1; // posicion donde se encuentra el usuario
+                bool encontrado = false;
+                int i = 0; 
+                while (!encontrado && i < numConectados)
+                {
+                    if (partes[i + 1] == nombreUsuario) // a partir de la posicion 1 hay nombres de usuarios
+                    {
+                        encontrado = true;
+                        pos = i + 1; 
+                    }
+                }
+                if (!encontrado)
+                {
+                    MessageBox.Show("Error al buscar usuario");
+                }*/
+
+            }
+            else if (partidaEmpezada)
+            {
+                MessageBox.Show("Partida ya empezada");
+            }
+            else if (!conectado)
+            {
+                MessageBox.Show("You must be connected in order to send messages to the server");
             }
         }
     }

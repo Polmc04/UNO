@@ -43,6 +43,11 @@
             this.MasELO = new System.Windows.Forms.Button();
             this.ColorCarta = new System.Windows.Forms.Button();
             this.DimeConectados = new System.Windows.Forms.Button();
+            this.EmpezarPartida = new System.Windows.Forms.Button();
+            this.Player2 = new System.Windows.Forms.Label();
+            this.Player4 = new System.Windows.Forms.Label();
+            this.labelYourCards = new System.Windows.Forms.Label();
+            this.Player3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -212,11 +217,67 @@
             this.DimeConectados.UseVisualStyleBackColor = true;
             this.DimeConectados.Click += new System.EventHandler(this.DimeConectados_Click);
             // 
+            // EmpezarPartida
+            // 
+            this.EmpezarPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EmpezarPartida.Location = new System.Drawing.Point(1494, 779);
+            this.EmpezarPartida.Name = "EmpezarPartida";
+            this.EmpezarPartida.Size = new System.Drawing.Size(201, 53);
+            this.EmpezarPartida.TabIndex = 15;
+            this.EmpezarPartida.Text = "Empezar partida";
+            this.EmpezarPartida.UseVisualStyleBackColor = true;
+            this.EmpezarPartida.Click += new System.EventHandler(this.EmpezarPartida_Click);
+            // 
+            // Player2
+            // 
+            this.Player2.AutoSize = true;
+            this.Player2.Location = new System.Drawing.Point(507, 382);
+            this.Player2.Name = "Player2";
+            this.Player2.Size = new System.Drawing.Size(45, 13);
+            this.Player2.TabIndex = 16;
+            this.Player2.Text = "Player 2";
+            this.Player2.Visible = false;
+            // 
+            // Player4
+            // 
+            this.Player4.AutoSize = true;
+            this.Player4.Location = new System.Drawing.Point(1237, 382);
+            this.Player4.Name = "Player4";
+            this.Player4.Size = new System.Drawing.Size(45, 13);
+            this.Player4.TabIndex = 17;
+            this.Player4.Text = "Player 4";
+            this.Player4.Visible = false;
+            // 
+            // labelYourCards
+            // 
+            this.labelYourCards.AutoSize = true;
+            this.labelYourCards.Location = new System.Drawing.Point(863, 522);
+            this.labelYourCards.Name = "labelYourCards";
+            this.labelYourCards.Size = new System.Drawing.Size(59, 13);
+            this.labelYourCards.TabIndex = 18;
+            this.labelYourCards.Text = "Your Cards";
+            this.labelYourCards.Visible = false;
+            // 
+            // Player3
+            // 
+            this.Player3.AutoSize = true;
+            this.Player3.Location = new System.Drawing.Point(863, 231);
+            this.Player3.Name = "Player3";
+            this.Player3.Size = new System.Drawing.Size(45, 13);
+            this.Player3.TabIndex = 19;
+            this.Player3.Text = "Player 3";
+            this.Player3.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1707, 844);
+            this.Controls.Add(this.Player3);
+            this.Controls.Add(this.labelYourCards);
+            this.Controls.Add(this.Player4);
+            this.Controls.Add(this.Player2);
+            this.Controls.Add(this.EmpezarPartida);
             this.Controls.Add(this.DimeConectados);
             this.Controls.Add(this.ColorCarta);
             this.Controls.Add(this.MasELO);
@@ -229,6 +290,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -249,6 +311,11 @@
         private System.Windows.Forms.Button MasELO;
         private System.Windows.Forms.Button ColorCarta;
         private System.Windows.Forms.Button DimeConectados;
+        private System.Windows.Forms.Button EmpezarPartida;
+        private System.Windows.Forms.Label Player2;
+        private System.Windows.Forms.Label Player4;
+        private System.Windows.Forms.Label labelYourCards;
+        private System.Windows.Forms.Label Player3;
     }
 }
 

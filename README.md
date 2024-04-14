@@ -15,12 +15,11 @@ generada por Pol Miró
 
 Pendiente (Requisitos a implementar en esta versión)
 
--Implementar interfaz gráfica (añadir cartas del cliente)
-
+-
 
 Avances (Requisitos del proyecto):
 
--Lista conectados
+-Implementar interfaz gráfica (añadir cartas del cliente)
 
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
