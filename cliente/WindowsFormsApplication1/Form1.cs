@@ -300,7 +300,7 @@ namespace WindowsFormsApplication1
                 for (int i = 0; i < 7; i++)
                 {
                     PictureBox pictureBox = new PictureBox();
-                    pictureBox.Location = new Point(i * 100 + 550, 600); // Alinear horizontalmente
+                    pictureBox.Location = new Point(i * 100 + 450, 600); // Alinear horizontalmente
                     pictureBox.Size = new Size(80, 120); // Tamaño de la carta
                     pictureBox.SizeMode = PictureBoxSizeMode.StretchImage; // Ajustar tamaño de imagen
                     Controls.Add(pictureBox);
@@ -349,6 +349,11 @@ namespace WindowsFormsApplication1
             {
                 MessageBox.Show("You must be connected in order to send messages to the server");
             }
+        }
+
+        private void Player2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

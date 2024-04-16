@@ -71,7 +71,7 @@
             // Connect
             // 
             this.Connect.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Connect.Location = new System.Drawing.Point(1547, 12);
+            this.Connect.Location = new System.Drawing.Point(1208, 12);
             this.Connect.Name = "Connect";
             this.Connect.Size = new System.Drawing.Size(147, 53);
             this.Connect.TabIndex = 4;
@@ -165,7 +165,7 @@
             // Disconnect
             // 
             this.Disconnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Disconnect.Location = new System.Drawing.Point(1547, 98);
+            this.Disconnect.Location = new System.Drawing.Point(1208, 98);
             this.Disconnect.Name = "Disconnect";
             this.Disconnect.Size = new System.Drawing.Size(147, 53);
             this.Disconnect.TabIndex = 10;
@@ -220,7 +220,7 @@
             // EmpezarPartida
             // 
             this.EmpezarPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EmpezarPartida.Location = new System.Drawing.Point(1494, 779);
+            this.EmpezarPartida.Location = new System.Drawing.Point(1154, 779);
             this.EmpezarPartida.Name = "EmpezarPartida";
             this.EmpezarPartida.Size = new System.Drawing.Size(201, 53);
             this.EmpezarPartida.TabIndex = 15;
@@ -231,17 +231,18 @@
             // Player2
             // 
             this.Player2.AutoSize = true;
-            this.Player2.Location = new System.Drawing.Point(507, 382);
+            this.Player2.Location = new System.Drawing.Point(456, 316);
             this.Player2.Name = "Player2";
             this.Player2.Size = new System.Drawing.Size(45, 13);
             this.Player2.TabIndex = 16;
             this.Player2.Text = "Player 2";
             this.Player2.Visible = false;
+            this.Player2.Click += new System.EventHandler(this.Player2_Click);
             // 
             // Player4
             // 
             this.Player4.AutoSize = true;
-            this.Player4.Location = new System.Drawing.Point(1237, 382);
+            this.Player4.Location = new System.Drawing.Point(951, 316);
             this.Player4.Name = "Player4";
             this.Player4.Size = new System.Drawing.Size(45, 13);
             this.Player4.TabIndex = 17;
@@ -251,7 +252,7 @@
             // labelYourCards
             // 
             this.labelYourCards.AutoSize = true;
-            this.labelYourCards.Location = new System.Drawing.Point(863, 522);
+            this.labelYourCards.Location = new System.Drawing.Point(715, 522);
             this.labelYourCards.Name = "labelYourCards";
             this.labelYourCards.Size = new System.Drawing.Size(59, 13);
             this.labelYourCards.TabIndex = 18;
@@ -261,7 +262,7 @@
             // Player3
             // 
             this.Player3.AutoSize = true;
-            this.Player3.Location = new System.Drawing.Point(863, 231);
+            this.Player3.Location = new System.Drawing.Point(715, 203);
             this.Player3.Name = "Player3";
             this.Player3.Size = new System.Drawing.Size(45, 13);
             this.Player3.TabIndex = 19;
@@ -272,7 +273,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1707, 844);
+            this.ClientSize = new System.Drawing.Size(1365, 844);
             this.Controls.Add(this.Player3);
             this.Controls.Add(this.labelYourCards);
             this.Controls.Add(this.Player4);
