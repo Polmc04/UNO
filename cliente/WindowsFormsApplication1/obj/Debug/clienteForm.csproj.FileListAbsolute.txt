@@ -111,7 +111,6 @@ C:\share\UNO\cliente\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1
 C:\share\UNO\cliente\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
 C:\share\UNO\cliente\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
 C:\share\UNO\cliente\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.AssemblyReference.cache
-C:\share\UNO\cliente\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.SuggestedBindingRedirects.cache
 C:\share\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
 C:\share\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 C:\share\UNO\cliente\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.cache

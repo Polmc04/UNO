@@ -1,14 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\polmi\\OneDrive\\Escritorio\\Uni\\Q4\\SO\\Proyecto\\Versiones\\VersionActual\\cliente\\",
+  "WorkspaceRootPath": "C:\\share\\UNO\\cliente\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F5E08E40-5E04-41A2-AFB5-56E3E3274D24}|WindowsFormsApplication1\\clienteForm.csproj|C:\\Users\\polmi\\OneDrive\\Escritorio\\Uni\\Q4\\SO\\Proyecto\\Versiones\\VersionActual\\cliente\\windowsformsapplication1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5E08E40-5E04-41A2-AFB5-56E3E3274D24}|WindowsFormsApplication1\\clienteForm.csproj|solutionrelative:windowsformsapplication1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F5E08E40-5E04-41A2-AFB5-56E3E3274D24}|WindowsFormsApplication1\\clienteForm.csproj|C:\\share\\UNO\\cliente\\windowsformsapplication1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{F5E08E40-5E04-41A2-AFB5-56E3E3274D24}|WindowsFormsApplication1\\clienteForm.csproj|solutionrelative:windowsformsapplication1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5E08E40-5E04-41A2-AFB5-56E3E3274D24}|WindowsFormsApplication1\\clienteForm.csproj|c:\\users\\polmi\\onedrive\\escritorio\\uni\\q4\\so\\proyecto\\versiones\\versionactual\\cliente\\windowsformsapplication1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{F5E08E40-5E04-41A2-AFB5-56E3E3274D24}|WindowsFormsApplication1\\clienteForm.csproj|solutionrelative:windowsformsapplication1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{F5E08E40-5E04-41A2-AFB5-56E3E3274D24}|WindowsFormsApplication1\\clienteForm.csproj|c:\\share\\uno\\cliente\\windowsformsapplication1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5E08E40-5E04-41A2-AFB5-56E3E3274D24}|WindowsFormsApplication1\\clienteForm.csproj|solutionrelative:windowsformsapplication1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,29 +18,29 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\polmi\\OneDrive\\Escritorio\\Uni\\Q4\\SO\\Proyecto\\Versiones\\VersionActual\\cliente\\WindowsFormsApplication1\\Form1.cs",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\share\\UNO\\cliente\\WindowsFormsApplication1\\Form1.cs",
               "RelativeDocumentMoniker": "WindowsFormsApplication1\\Form1.cs",
-              "ToolTip": "C:\\Users\\polmi\\OneDrive\\Escritorio\\Uni\\Q4\\SO\\Proyecto\\Versiones\\VersionActual\\cliente\\WindowsFormsApplication1\\Form1.cs [Design]",
-              "RelativeToolTip": "WindowsFormsApplication1\\Form1.cs [Design]",
+              "ToolTip": "C:\\share\\UNO\\cliente\\WindowsFormsApplication1\\Form1.cs [Dise\u00F1o]",
+              "RelativeToolTip": "WindowsFormsApplication1\\Form1.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-09T09:47:35.981Z",
-              "EditorCaption": " [Design]"
+              "EditorCaption": " [Dise\u00F1o]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\Users\\polmi\\OneDrive\\Escritorio\\Uni\\Q4\\SO\\Proyecto\\Versiones\\VersionActual\\cliente\\WindowsFormsApplication1\\Form1.cs",
+              "DocumentMoniker": "C:\\share\\UNO\\cliente\\WindowsFormsApplication1\\Form1.cs",
               "RelativeDocumentMoniker": "WindowsFormsApplication1\\Form1.cs",
-              "ToolTip": "C:\\Users\\polmi\\OneDrive\\Escritorio\\Uni\\Q4\\SO\\Proyecto\\Versiones\\VersionActual\\cliente\\WindowsFormsApplication1\\Form1.cs",
+              "ToolTip": "C:\\share\\UNO\\cliente\\WindowsFormsApplication1\\Form1.cs",
               "RelativeToolTip": "WindowsFormsApplication1\\Form1.cs",
-              "ViewState": "AQIAAAgBAAAAAAAAAAApwBcBAAAuAAAA",
+              "ViewState": "AQIAAAoBAAAAAAAAAIAwwBcBAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-09T09:38:10.079Z",
               "EditorCaption": ""
