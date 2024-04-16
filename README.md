@@ -13,7 +13,8 @@ Version 2
 generada por Pol Miró
 verificada por Joan Fusté
 comunicada por Emmanuel Alonso Mendoza Cobeña
-URL:  https://www.youtube.com/watch?v=ju_AEE3MGg
+URL:  https://youtu.be/1AZkg6WifUQ   https://youtu.be/JM-loKVtLuA
+
 
 Pendiente (Requisitos a implementar en esta versión)
 
