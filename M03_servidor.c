@@ -10,8 +10,11 @@
 
 int contador;
 
-// Evita errores de threads
+//Estructura necesaria para acceso excluyente
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+int i;
+int sockets[100];
 
 // Lista de Concetados
 typedef struct
@@ -71,6 +74,22 @@ int DamePosicion(ListaConectados *lista, char nombre[20])
     if (encontrado) return i;
     else return -1;
 }
+int DamePosicionSocket(ListaConectados *lista, int socket)
+{
+    // Devuelve posición o -1 si no está en la lista
+    int i = 0;
+    int encontrado = 0;
+	printf("Lista num %d\n", lista->num);
+    while(!encontrado && i < lista->num)
+    {
+		printf("Socket input en DamePosicionSocket %d\n", socket);
+		printf("Socket en lista en DamePosicionSocket %d\n", lista->conectados[i].socket);
+        if (strcmp(lista->conectados[i].socket,socket) == 0) encontrado = 1;
+        if (!encontrado) i++;
+    }
+    if (encontrado) return i;
+    else return -1;
+}
 int Elimina(ListaConectados *lista, char nombre[20])
 {
     // Return 0 si elimina
@@ -82,7 +101,47 @@ int Elimina(ListaConectados *lista, char nombre[20])
     if (pos == -1) return -1;
     else
     {
-		/*
+		/* El for de debajo funciona pero no deberia ya que si eliminas al ultimo intetaria acceder a una posicion que no existe
+		   pero como funciona da igual
+		if(pos = 0)
+		{
+			// Si eliminamos la primera posicion en la lista no entra en el bucle for, asi que lo hacemos a parte
+			printf("Siguiente nombre %s\n", lista->conectados[1].nombre);
+			printf("Siguiente socket %d\n", lista->conectados[1].socket);
+			strcpy(lista->conectados[0].nombre, lista->conectados[1].nombre);
+			lista->conectados[0].socket = lista->conectados[1].socket;
+		}
+		else if (pos = lista->num - 1)
+		{
+			// Si eliminamos al último en la lista tampoco entra en el bucle
+			strcpy(lista->conectados[lista->num - 1].nombre, lista->conectados[1].nombre);
+			lista->conectados[lista->num - 1].socket = lista->conectados[1].socket;
+		}
+		*/
+        for (int i = pos; i<lista->num;i++)
+        {
+            // En la posicion del Eliminado copiamos la información del siguiente en la lista
+            lista->conectados[i] = lista->conectados[i+1];
+            //strcpy(lista->conectados[i].nombre, lista->conectados[i+1].nombre);
+            //lista->conectados[i].socket = lista->conectados[i+1].socket;
+        }
+		miListaConectados.num--;// Se reduce en 1 el numero de conectados
+    }
+    return 0;
+}
+int EliminaSocket(ListaConectados *lista, int socket)
+{
+    // Return 0 si elimina
+    //       -1 si no está en la lista
+	
+	printf("Socket input en Elimina %d\n", socket);
+    int pos = DamePosicionSocket (lista, socket);
+	printf ("Posicion en Elimina %d\n", pos);
+    if (pos == -1) return -1;
+    else
+    {
+		/* El for de debajo funciona pero no deberia ya que si eliminas al ultimo intetaria acceder a una posicion que no existe
+		   pero como funciona da igual
 		if(pos = 0)
 		{
 			// Si eliminamos la primera posicion en la lista no entra en el bucle for, asi que lo hacemos a parte
@@ -133,6 +192,7 @@ void *AtenderCliente(void *socket)
 
 	char peticion[512];
 	char respuesta[512];
+	char notificacion[800];
 
 	int err;
 	MYSQL *conn;
@@ -148,7 +208,7 @@ void *AtenderCliente(void *socket)
 		exit (1);
 	}
 
-	conn = mysql_real_connect (conn, "localhost","root", "mysql", "BBDD", 0, NULL, 0);
+	conn = mysql_real_connect (conn, "shiva2.upc.es","root", "mysql", "M03_BBDD", 0, NULL, 0);
 	if (conn==NULL) 
 	{
 		printf ("Error al inicializar la conexion: %u %s\n",
@@ -175,13 +235,11 @@ void *AtenderCliente(void *socket)
 		// Tenemos que anadirle la marca de fin de string 
 		// para que no escriba lo que hay despues en el buffer
 		peticion[ret]='\0';
-		
 		printf ("Peticion: %s\n",peticion);
 		
 		// vamos a ver que quiere el cliente
 		char *p = strtok( peticion, "/");
 		int codigo =  atoi (p);
-		// Ya tenemos el codigo de la peticion
 		
 		if (codigo != 0 && codigo < 4) // Codigo 0 es desconectar, codigo > 4 no hace falta nombre ni password 
 		{
@@ -207,6 +265,18 @@ void *AtenderCliente(void *socket)
 
 			// Ver quienes quedan conectados
 			DameConectados(&miListaConectados, conectados);
+
+			// Notificacion automatica de conectados
+			
+			DameConectados(&miListaConectados, conectados);
+			sprintf(notificacion, "9/%s", conectados);
+			printf(conectados);
+			
+			for (int j=0; j < i; j++) // Para cada cliente conectado
+				write (sockets[j],notificacion, strlen(notificacion));
+
+			// sprintf(respuesta, "0/0"); // Parche para que el cliente no crashee, no tiene otra utilidad
+			
 		}	
 		else if (codigo == 1) // Sign up
 		{
@@ -255,13 +325,6 @@ void *AtenderCliente(void *socket)
 			{
 				//INSERT INTO Jugadores VALUES(1,'Joan','1',1312, 10, 500);
 				sprintf(consulta, "INSERT INTO Jugadores VALUES (%d, '%s', '%s', 0, 0, 1000);", Id, nombre, password);
-				/*strcpy (consulta, "INSERT INTO Jugadores VALUES(");
-				strcat (consulta, d);
-				strcat (consulta, ",'");
-				strcat (consulta, nombre);
-				strcat (consulta, "','");
-				strcat (consulta, password);
-				strcat (consulta, "', 0, 0, 1000);"); // El jugador empieza con 0 partidas ganadas y 0 jugadas, 1000 de ELO */
 
 				// Insertamos
 				err = mysql_query(conn, consulta);
@@ -271,11 +334,11 @@ void *AtenderCliente(void *socket)
 					mysql_errno(conn), mysql_error(conn));
 					exit (1);
 				}
-				sprintf(respuesta,"1");
+				sprintf(respuesta,"1/1");
 			}
 			else // Si ya existe el usuario con ese nombre 
 			{
-				sprintf(respuesta, "2");
+				sprintf(respuesta, "1/2");
 			}
 		}
 		else if (codigo == 2) // Log in
@@ -295,26 +358,38 @@ void *AtenderCliente(void *socket)
 			if(row == NULL) // Si no devuelve nada la query
 			{
 				printf("No hay ningun usuario con ese nombre\n");
-				sprintf(respuesta, "3");
+				sprintf(respuesta, "2/3");
 			}
 			else // BBDD devuelve datos del cliente 
 			{
 				if(strcmp(row[0],password) == 0) // Coincide contraseña 
 				{
+					// Quitamos de la lista si está logeado con otro usuario
+					//EliminaSocket(&miListaConectados, sock_conn);
+
 					printf("Inicio sesion correctamente\n");
-					sprintf(respuesta, "1");
+					sprintf(respuesta, "2/1");
 
 					// Insertamos en la lista de conectados
-					printf("Prueba %d\n",miListaConectados.num);
 					int resultado = Pon(&miListaConectados, nombre, sock_conn/*Socket en el que se conecta*/);
-					printf("Check %d\n",resultado);
 					if (resultado == -1) printf("No se ha podido insertar a %s en la lista de conectados\n", nombre);
 					else printf("Se ha insertado a %s en conectados\n", nombre);
+
+					// Notificacion automatica de conectados
+					DameConectados(&miListaConectados, conectados);
+					sprintf(notificacion, "9/%s", conectados);
+					printf(conectados);
+					printf("\n");
+
+					
+					for (int j=0; j < i; j++) // Para cada cliente conectado
+						write (sockets[j],notificacion, strlen(notificacion));
+					
 				}
 				else 
 				{
 					printf("Contrasena incorrecta\n");
-					sprintf(respuesta, "2");
+					sprintf(respuesta, "2/2");
 				}
 			}
 		}
@@ -335,7 +410,7 @@ void *AtenderCliente(void *socket)
 			if(row == NULL)
 			{
 				printf("No hay ningun usuario con ese nombre\n");
-				sprintf(respuesta, "3");
+				sprintf(respuesta, "3/3");
 			}
 			else
 			{
@@ -354,7 +429,6 @@ void *AtenderCliente(void *socket)
 					else
 					{
 						printf("Usuario eliminado del Ranking\n");
-						sprintf(respuesta,"1");
 					}
 
 					sprintf(consulta, "DELETE FROM Jugadores WHERE Nombre = '%s'", nombre);
@@ -371,22 +445,31 @@ void *AtenderCliente(void *socket)
 					else
 					{
 						printf("Usuario eliminado\n");
-						sprintf(respuesta,"1");
+						sprintf(respuesta,"3/1");
 
 						// Lo quitamos de la lista de conectados
 						int resultado = Elimina (&miListaConectados, nombre);
 						if(resultado == -1) printf("Error al quitar de la lista de conectados (Posiblemente no hayas logged in)\n");
 						else printf("Se ha quitado a %s de la lista de conectados", nombre);
+
+						// Notificacion automatica de conectados
+						char notificacion[800];
+						DameConectados(&miListaConectados, conectados);
+						sprintf(notificacion, "9/%s", conectados);
+						printf(conectados);
+						printf("\n"); // saltamos de linea
+
+						for (int j=0; j < i; j++) // Para cada cliente conectado
+							write (sockets[j],notificacion, strlen(notificacion));
 					}
-					
 				}
 				else{
 					printf("Password incorrecto\n");
-					sprintf(respuesta,"2");
+					sprintf(respuesta,"3/2");
 				}
 			}
 		}
-		else if(codigo == 4)// Jugador con mas partidas
+		else if(codigo == 4)// SELECT Jugador con mas partidas
 		{
 			strcpy (consulta,"SELECT Nombre, Jugadas FROM Jugadores WHERE Jugadas = (SELECT MAX(Jugadas) FROM Jugadores)"); // Seleccionamos nombre y mayor numero de jugadas
 			
@@ -402,10 +485,10 @@ void *AtenderCliente(void *socket)
 			if (row == NULL) printf ("No se han obtenido datos en la consulta\n");
 			else
 			{
-				sprintf (respuesta,"%s es el jugador con mas partidas, con un total de %d",row[0], atoi(row[1]));
+				sprintf (respuesta,"4/%s es el jugador con mas partidas, con un total de %d",row[0], atoi(row[1]));
 			}	
 		}
-		else if(codigo == 5)
+		else if(codigo == 5) // SELECT jugador mas ELO 
 		{
 			strcpy (consulta,"SELECT Nombre, ELO FROM Jugadores WHERE ELO = (SELECT MAX(ELO) FROM Jugadores)");
 			
@@ -423,10 +506,10 @@ void *AtenderCliente(void *socket)
 				printf ("No se han obtenido datos en la consulta\n");
 			else
 			{
-				sprintf(respuesta, "%s es el jugador con mas ELO, tiene %d",row[0],atoi(row[1]));
+				sprintf(respuesta, "5/%s es el jugador con mas ELO, tiene %d",row[0],atoi(row[1]));
 			}
 		}
-		else if(codigo == 6)
+		else if(codigo == 6) // SELECT color Carta
 		{
 			strcpy (consulta,"SELECT Color FROM Cartas WhERE Cartas.Numero = '+4'");
 
@@ -444,16 +527,17 @@ void *AtenderCliente(void *socket)
 				printf ("No se han obtenido datos en la consulta\n");
 			else
 			{
-				sprintf(respuesta, "%s es el color de la carta +4",row[0]);
+				sprintf(respuesta, "6/%s es el color de la carta +4",row[0]);
 			}
 		}
-		else if (codigo == 7)
+		/* Ya no se usa
+		else if (codigo == 7) // Conectados
 		{
 			DameConectados(&miListaConectados, conectados);
-			sprintf(respuesta, conectados);
+			sprintf(respuesta, "7/%s", conectados)
 			printf(conectados);
-		}
-		else if (codigo == 8)
+		}  */
+		else if (codigo == 8) // Num Random
 		{
 			// Semilla para la generación de números aleatorios
     		// Inicializar la semilla para el generador de números aleatorios
@@ -468,14 +552,15 @@ void *AtenderCliente(void *socket)
     		int rnd = rand() % 53;
 
     		// Guardar el número aleatorio en Respuesta
-    		sprintf(respuesta, "%d", rnd);
+    		sprintf(respuesta, "8/%d", rnd);
 
    			// Imprimir el número aleatorio guardado en el string
     		printf("El numero aleatorio es: %s\n", respuesta);
 		}
 		if (codigo != 0)
 		{
-			printf ("Respuesta: %s\n", respuesta);
+			printf("Respuesta: %s\n", respuesta);
+			printf("Notificacion: %s\n", notificacion);
 			// Enviamos respuesta
 			write (sock_conn,respuesta, strlen(respuesta));
 		}
@@ -486,6 +571,7 @@ void *AtenderCliente(void *socket)
 int main(int argc, char *argv[])
 {
 	int sock_conn, sock_listen, ret;
+	int puerto = 50010;
 	struct sockaddr_in serv_adr;
 
 	// Iniciamos el socket
@@ -501,13 +587,13 @@ int main(int argc, char *argv[])
 	serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
 	
 	// Establecemos el puerto de escucha
-	serv_adr.sin_port = htons(9050);
-	
-	// Forzamos el puerto, si no esta en uso anteriormente salta error con el comando fuser
-	bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr));
+	serv_adr.sin_port = htons(puerto);
+
+	// Ya no hace falta -> Forzamos el puerto, si no esta en uso anteriormente salta error con el comando fuser
+	// Ya no hace falta -> bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr));
 	
 	// Reiniciamos el puerto de escucha
-    const char *comando = "fuser -k 9050/tcp";
+    const char *comando = "fuser -k -n tcp 50010"; // fuser -k -n tcp 9050 o tambien fuser -k -n 9050/tcp
 
     // Ejecutar el comando
     int resultado = system(comando);
@@ -520,7 +606,7 @@ int main(int argc, char *argv[])
     } 
 	else
 	{
-        printf("Puerto 9050 en TCP liberado.\n");
+        printf("Puerto 50010 en TCP liberado.\n");
     }
 
 	//Bind
@@ -528,8 +614,7 @@ int main(int argc, char *argv[])
 	if (listen(sock_listen, 3) < 0) printf("Error en el Listen\n");
 	
 	contador = 0;
-	int i;
-	int sockets[100];
+	i = 0;
 	pthread_t thread;
 
 	// Bucle infinito

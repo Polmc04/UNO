@@ -15,6 +15,9 @@ verificada por Joan Fusté
 comunicada por Emmanuel Alonso Mendoza Cobeña
 URL:  https://youtu.be/1AZkg6WifUQ   https://youtu.be/JM-loKVtLuA
 
+Verision 3
+
+generado por Joan Fusté
 
 Pendiente (Requisitos a implementar en esta versión)
 
@@ -22,20 +25,13 @@ Pendiente (Requisitos a implementar en esta versión)
 
 Avances (Requisitos del proyecto):
 
--Implementar interfaz gráfica (añadir cartas del cliente)
-
+-
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
--Arreglo query COUNT Jugadores
-
--Arreglo crasheos del cliente si mandas querys y no te conectas antes
-
--Arreglo y optimización querys del cliente
-
--Imagenes de cartas
+-La conexión entre cliente y servidor ya funciona a la primera
 
 Errores detectados:
 
--La conexión entre cliente y servidor no funciona a la primera, hay que reiniciar para que funcione a veces
+-Te puedes logear con más de una cuenta en un mismo form
 
 

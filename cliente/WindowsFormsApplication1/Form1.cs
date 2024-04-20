@@ -11,6 +11,8 @@ using System.Net.Sockets;
 using System.Collections;
 using System.Security.Cryptography;
 using System.IO;
+using System.Threading;
+
 
 
 namespace WindowsFormsApplication1
@@ -19,10 +21,103 @@ namespace WindowsFormsApplication1
     {
         char Carita = Convert.ToChar(002); // Genera un emoji con ASCII
         bool conectado = false; // Guarda el estado de la conexion con el server
+        Thread atender;
         Socket server;
+        
+        int numCartaRandom; // Provisional
+        bool nuevaCarta = false;
+
+        string usuario;
+
         public Form1()
         {
             InitializeComponent();
+            //CheckForIllegalCrossThreadCalls = false; // Necesario para que los elementos de los formularios puedan ser
+                                                     // accedidos desde threads diferentes a los que los crearon
+        }
+        public void GuardaCarta(string mensaje)
+        {
+            numCartaRandom = Convert.ToInt32(mensaje);
+            nuevaCarta = true;
+        }
+        private void AtenderServidor()
+        {
+            while (true)
+            {
+                //Recibimos mensaje del servidor
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                string[] trozos = Encoding.ASCII.GetString(msg2).Split('/');
+                //for (int i = 0; i < trozos.Length; i++)
+                //{
+                //    MessageBox.Show(trozos[i]);
+                //}
+                int codigo = Convert.ToInt32(trozos[0]);
+                string mensaje = trozos[1].Split('\0')[0];
+                switch (codigo)
+                {
+                    case 1:  // Sign up
+
+                        if (mensaje == "1") // 1 si el server ha podido registrarlo
+                            MessageBox.Show("Succesfully registered!" + Carita);
+                        else if (mensaje == "2")
+                            MessageBox.Show("Unable to create account, user " + nombre.Text + " alredy exists");
+                        break;
+                    case 2:  // Log in
+
+                        if (mensaje == "1") // Server ha podido logearlo
+                        {
+                            MessageBox.Show("Logged In! " + Carita);
+                            usuario = nombre.Text;
+                        }
+                        else if (mensaje == "2") // Pasword incorrecto
+                            MessageBox.Show("Unable to Log In, password does not match!");
+                        else if (mensaje == "3") // No existe el usuario
+                            MessageBox.Show("Unable to Log In, user " + nombre.Text + " does not exist. Try to Sing Up!");
+                        break;
+                    case 3: // Remove
+
+                        if (mensaje == "1") // 1 si el server ha podido eliminar la cuenta
+                            MessageBox.Show("Account deleted " + Carita);
+                        else if (mensaje == "2")
+                            MessageBox.Show("Password does not match!");
+                        else if (mensaje == "3")
+                            MessageBox.Show("User " + nombre.Text + " does not exist.");
+                        break;
+                    case 4: // SELECT mas partidas
+
+                        MessageBox.Show(mensaje);
+                        break;
+                    case 5: // SELECT mas ELO
+
+                        MessageBox.Show(mensaje);
+                        break;
+                    case 6: // SELECT color carta
+
+                        MessageBox.Show(mensaje);
+                        break;
+                    case 8: // Dame numero random
+
+                        GuardaCarta(mensaje);
+                        break;
+                    case 9: // Recibimos notificacion
+
+                        int numConectados = int.Parse(trozos[1]); // numero de conectados en la segunda posicion del vector trozos p. ej:  9/1/Manolo
+                        string nombres = "";
+                        for (int i = 2; i <= numConectados + 1; i++) // A partir de trozos [2] tenemos los nombres de los conectados
+                        {
+                            // Agregar cada nombre a la cadena de nombres
+                            nombres += trozos[i] + Environment.NewLine;
+                        }
+                        MessageBox.Show("Hay " + numConectados + " jugadores conectados: " + Environment.NewLine + nombres);
+
+                        labelConectados.Invoke(new Action(() =>
+                        {
+                            labelConectados.Text = nombres;
+                        }));
+                        break;
+                }
+            }
         }
         private void Connect_Click(object sender, EventArgs e)
         {
@@ -30,8 +125,8 @@ namespace WindowsFormsApplication1
             {
                 //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
                 //al que deseamos conectarnos
-                IPAddress direc = IPAddress.Parse("192.168.56.102");
-                IPEndPoint ipep = new IPEndPoint(direc, 9050);
+                IPAddress direc = IPAddress.Parse("10.4.119.5");
+                IPEndPoint ipep = new IPEndPoint(direc, 50010);
 
                 //Creamos el socket 
                 server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -41,6 +136,11 @@ namespace WindowsFormsApplication1
                     this.BackColor = Color.Green;
                     conectado = true;
                     MessageBox.Show("Conectado");
+
+                    // Creamos el thread que atenderá los mensajes del servidor
+                    ThreadStart ts = delegate { AtenderServidor(); };
+                    atender = new Thread(ts);
+                    atender.Start();
                 }
                 catch (SocketException ex)
                 {
@@ -84,35 +184,12 @@ namespace WindowsFormsApplication1
                     string mensaje = "1/" + nombre.Text + "/" + passwordEncriptado;
                     byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                     server.Send(msg);
-
-                    //Recibimos la respuesta del servidor
-                    byte[] msg2 = new byte[80];
-                    server.Receive(msg2);
-                    mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-
-
-                    if (mensaje == "1") // 1 si el server ha podido registrarlo
-                        MessageBox.Show("Succesfully registered!" + Carita);
-                    else if (mensaje == "2")
-                        MessageBox.Show("Unable to create account, user " + nombre.Text + " alredy exists");
                 }
                 else if (LogIn.Checked)
                 {
                     string mensaje = "2/" + nombre.Text + "/" + passwordEncriptado;
                     byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                     server.Send(msg);
-
-                    //Recibimos la respuesta del servidor
-                    byte[] msg2 = new byte[80];
-                    server.Receive(msg2);
-                    mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                    if (mensaje == "1") // 1 si el server ha podido logearlo
-                        MessageBox.Show("Logged In! " + Carita);
-                    else if (mensaje == "2")
-                        MessageBox.Show("Unable to Log In, password does not match!");
-                    else if (mensaje == "3")
-                        MessageBox.Show("Unable to Log In, user " + nombre.Text + " does not exist. Try to Sing Up!");
-
                 }
                 else if (Remove.Checked)
                 {
@@ -120,17 +197,6 @@ namespace WindowsFormsApplication1
                     string mensaje = "3/" + nombre.Text + "/" + passwordEncriptado;
                     byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                     server.Send(msg);
-
-                    //Recibimos la respuesta del servidor
-                    byte[] msg2 = new byte[80];
-                    server.Receive(msg2);
-                    mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                    if (mensaje == "1") // 1 si el server ha podido eliminar la cuenta
-                        MessageBox.Show("Account deleted " + Carita);
-                    else if (mensaje == "2")
-                        MessageBox.Show("Password does not match!");
-                    else if (mensaje == "3")
-                        MessageBox.Show("User " + nombre.Text + " does not exist.");
                 }
             }
             else
@@ -149,12 +215,13 @@ namespace WindowsFormsApplication1
                 server.Send(msg);
 
                 // Nos desconectamos
+                atender.Abort();
                 this.BackColor = Color.Gray;
                 server.Shutdown(SocketShutdown.Both);
                 server.Close();
 
                 conectado = false;
-
+                labelConectados.Text =  null;
             }
             else
             {
@@ -170,13 +237,6 @@ namespace WindowsFormsApplication1
 
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
-
-                //Recibimos el mensaje del servidor; 
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                MessageBox.Show(mensaje);
-
             }
             else
             {
@@ -192,12 +252,6 @@ namespace WindowsFormsApplication1
 
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
-
-                //Recibimos el mensaje del servidor; 
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                MessageBox.Show(mensaje);
             }
             else
             {
@@ -213,53 +267,13 @@ namespace WindowsFormsApplication1
 
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
-
-                //Recibimos el mensaje del servidor; 
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                MessageBox.Show(mensaje);
             }
             else
             {
                 MessageBox.Show("You must be connected in order to send messages to the server");
             }
         }
-        public string[] DameConectados()
-        {
-            // Envia mensaje al server pidiendo la cantidad y nombre de conectados
-            string mensaje = "7/";
-
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-            server.Send(msg);
-
-            //Recibimos el mensaje del servidor; 
-            byte[] msg2 = new byte[800];
-            server.Receive(msg2);
-            mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-            string[] partes = mensaje.Split('/');
-            return partes;
-        }
-        private void DimeConectados_Click(object sender, EventArgs e)
-        {
-            if (conectado)
-            {
-                string[] partes = DameConectados();
-                int numConectados = int.Parse(partes[0]);
-                string nombres = "";
-                for (int i = 1; i <= numConectados; i++)
-                {
-                    // Agregar cada nombre a la cadena de nombres
-                    nombres += partes[i] + Environment.NewLine;
-                }
-                MessageBox.Show("Hay " + numConectados + " jugadores conectados: " + Environment.NewLine + nombres);
-            }
-            else
-            {
-                MessageBox.Show("You must be connected in order to send messages to the server");
-            }
-        }
-        int DameCarta()
+        void PideCarta()
         {
             // Peticion al server de pedir una carta
             int carta;
@@ -267,12 +281,6 @@ namespace WindowsFormsApplication1
 
             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
             server.Send(msg);
-
-            //Recibimos el mensaje del servidor; 
-            byte[] msg2 = new byte[80];
-            server.Receive(msg2);
-            mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-            return Convert.ToInt32(mensaje);
         }
         bool partidaEmpezada = false;
         private void EmpezarPartida_Click(object sender, EventArgs e)
@@ -284,15 +292,25 @@ namespace WindowsFormsApplication1
                 if (nombre.Text == string.Empty) labelYourCards.Text = labelYourCards.Text + " ( noname )";
                 else labelYourCards.Text = labelYourCards.Text + " (" + nombre.Text + ")";
 
-                // Repartimos Cartas
-                int[] cartas = new int[20]; // en este vector se guarda el id de la carta, max 20 cartas
+                // Repartimos Cartas Iniciales
+                int[] cartas = new int[20]; // en este vector se guarda los id de las cartas, max 20 cartas
 
                 for (int i = 0; i < 7; i++) // Se escogen 7 cartas iniciales al azar
                 {
-                    cartas[i] = DameCarta(); // Pedimos carta al server
+                    PideCarta(); // Pedimos carta al server
+                    while (!nuevaCarta) // hasta que no nos llegue una nueva carta
+                    {
+                        cartas[i] = numCartaRandom;
+                    }
+                    nuevaCarta = false;
                     while (cartas[i] == 53 || cartas[i] == 40 || cartas[i] == 27 || cartas[i] == 14) // Aún no tenemos cartas 0
                     {
-                        cartas[i] = DameCarta();
+                        PideCarta(); // Pedimos carta al server
+                        while (!nuevaCarta) // hasta que no nos llegue una nueva carta
+                        {
+                            cartas[i] = numCartaRandom;
+                        }
+                        nuevaCarta = false;
                     }
                 }
 
