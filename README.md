@@ -18,6 +18,7 @@ URL:  https://youtu.be/1AZkg6WifUQ   https://youtu.be/JM-loKVtLuA
 Verision 3
 
 generado por Joan Fusté
+Verificada por Emmanuel Alonso Mendoza Cobeña
 
 Pendiente (Requisitos a implementar en esta versión)
 
