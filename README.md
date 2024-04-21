@@ -19,6 +19,9 @@ Verision 3
 
 generado por Joan Fusté
 Verificada por Emmanuel Alonso Mendoza Cobeña
+comunicada por Pol Miró
+URL: https://youtu.be/DkznW4e-Q5Q
+
 
 Pendiente (Requisitos a implementar en esta versión)
 
