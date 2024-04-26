@@ -33,7 +33,7 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
             //CheckForIllegalCrossThreadCalls = false; // Necesario para que los elementos de los formularios puedan ser
-                                                     // accedidos desde threads diferentes a los que los crearon
+                                                       // accedidos desde threads diferentes a los que los crearon
         }
         public void GuardaCarta(string mensaje)
         {
@@ -69,6 +69,13 @@ namespace WindowsFormsApplication1
                         {
                             MessageBox.Show("Logged In! " + Carita);
                             usuario = nombre.Text;
+
+                            // Como no el objeto no es creado por el mismo thread tenemos que usar este metodo
+                            dataGridViewConectados.Invoke(new Action(() =>
+                            {
+                                labelConectados.Visible = true;
+                                dataGridViewConectados.Visible = true;
+                            }));
                         }
                         else if (mensaje == "2") // Pasword incorrecto
                             MessageBox.Show("Unable to Log In, password does not match!");
@@ -103,18 +110,31 @@ namespace WindowsFormsApplication1
                     case 9: // Recibimos notificacion
 
                         int numConectados = int.Parse(trozos[1]); // numero de conectados en la segunda posicion del vector trozos p. ej:  9/1/Manolo
-                        string nombres = "";
-                        for (int i = 2; i <= numConectados + 1; i++) // A partir de trozos [2] tenemos los nombres de los conectados
-                        {
-                            // Agregar cada nombre a la cadena de nombres
-                            nombres += trozos[i] + Environment.NewLine;
-                        }
-                        MessageBox.Show("Hay " + numConectados + " jugadores conectados: " + Environment.NewLine + nombres);
+                        string[] nombresVector = new string[numConectados];
 
-                        labelConectados.Invoke(new Action(() =>
+                        for (int i = 0; i < numConectados; i++)
                         {
-                            labelConectados.Text = nombres;
+                            nombresVector[i] = trozos[i+2];
+                        }
+
+                        // Crear una nueva instancia de DataTable
+                        var dt = new System.Data.DataTable();
+
+                        // Agregar una columna llamada "Nombres" al DataTable
+                        dt.Columns.Add("Nombres", typeof(string));
+
+                        // Iterar a través del vector de nombres y agregar cada nombre como una nueva fila en el DataTable
+                        foreach (var nombre in nombresVector)
+                        {
+                            dt.Rows.Add(nombre);
+                        }
+
+                        // Como no el objeto no es creado por el mismo thread tenemos que usar este metodo
+                        dataGridViewConectados.Invoke(new Action(() =>
+                        {
+                            dataGridViewConectados.DataSource = dt;
                         }));
+                        
                         break;
                 }
             }
@@ -125,8 +145,11 @@ namespace WindowsFormsApplication1
             {
                 //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
                 //al que deseamos conectarnos
-                IPAddress direc = IPAddress.Parse("10.4.119.5");
-                IPEndPoint ipep = new IPEndPoint(direc, 50010);
+                //IPAddress direc = IPAddress.Parse("10.4.119.5"); // Producción
+                IPAddress direc = IPAddress.Parse("192.168.56.102"); // Desarrollo
+
+                //IPEndPoint ipep = new IPEndPoint(direc, 50010); // Producción
+                IPEndPoint ipep = new IPEndPoint(direc, 9050); // Desarrollo
 
                 //Creamos el socket 
                 server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -221,7 +244,8 @@ namespace WindowsFormsApplication1
                 server.Close();
 
                 conectado = false;
-                labelConectados.Text =  null;
+                labelConectados.Visible = false;
+                dataGridViewConectados.Visible = false;
             }
             else
             {

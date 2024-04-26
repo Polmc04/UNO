@@ -48,8 +48,9 @@
             this.labelYourCards = new System.Windows.Forms.Label();
             this.labelPlayer3 = new System.Windows.Forms.Label();
             this.labelConectados = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.dataGridViewConectados = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConectados)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -264,28 +265,30 @@
             // 
             // labelConectados
             // 
-            this.labelConectados.Location = new System.Drawing.Point(179, 275);
+            this.labelConectados.AutoSize = true;
+            this.labelConectados.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelConectados.Location = new System.Drawing.Point(172, 234);
             this.labelConectados.Name = "labelConectados";
-            this.labelConectados.Size = new System.Drawing.Size(100, 200);
-            this.labelConectados.TabIndex = 20;
-            this.labelConectados.Text = "nadie conectado";
+            this.labelConectados.Size = new System.Drawing.Size(183, 18);
+            this.labelConectados.TabIndex = 21;
+            this.labelConectados.Text = "Jugadores Conectados";
+            this.labelConectados.Visible = false;
             // 
-            // label3
+            // dataGridViewConectados
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(172, 234);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(183, 18);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "Jugadores Conectados";
+            this.dataGridViewConectados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewConectados.Location = new System.Drawing.Point(175, 266);
+            this.dataGridViewConectados.Name = "dataGridViewConectados";
+            this.dataGridViewConectados.Size = new System.Drawing.Size(172, 214);
+            this.dataGridViewConectados.TabIndex = 22;
+            this.dataGridViewConectados.Visible = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1443, 790);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.dataGridViewConectados);
             this.Controls.Add(this.labelConectados);
             this.Controls.Add(this.labelPlayer3);
             this.Controls.Add(this.labelYourCards);
@@ -304,6 +307,7 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConectados)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -331,7 +335,7 @@
         private System.Windows.Forms.Label labelYourCards;
         private System.Windows.Forms.Label labelPlayer3;
         private System.Windows.Forms.Label labelConectados;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridView dataGridViewConectados;
     }
 }
 

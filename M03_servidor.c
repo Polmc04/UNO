@@ -208,7 +208,8 @@ void *AtenderCliente(void *socket)
 		exit (1);
 	}
 
-	conn = mysql_real_connect (conn, "shiva2.upc.es","root", "mysql", "M03_BBDD", 0, NULL, 0);
+	//conn = mysql_real_connect (conn, "shiva2.upc.es","root", "mysql", "M03_BBDD", 0, NULL, 0); // Producción
+	conn = mysql_real_connect (conn, "localhost","root", "mysql", "BBDD", 0, NULL, 0); // Desarrollo
 	if (conn==NULL) 
 	{
 		printf ("Error al inicializar la conexion: %u %s\n",
@@ -571,7 +572,8 @@ void *AtenderCliente(void *socket)
 int main(int argc, char *argv[])
 {
 	int sock_conn, sock_listen, ret;
-	int puerto = 50010;
+	//int puerto = 50010; // Producción
+	int puerto = 9050; // Desarrollo
 	struct sockaddr_in serv_adr;
 
 	// Iniciamos el socket

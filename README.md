@@ -22,6 +22,9 @@ Verificada por Emmanuel Alonso Mendoza Cobeña
 comunicada por Pol Miró
 URL: https://youtu.be/DkznW4e-Q5Q
 
+Verision 3
+
+generado por Pol Miró
 
 Pendiente (Requisitos a implementar en esta versión)
 
