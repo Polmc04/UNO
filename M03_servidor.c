@@ -30,12 +30,183 @@ typedef struct
 
 ListaConectados miListaConectados;
 
+// Lista de Salas
+typedef struct
+{
+    char nombre[20];
+    int socket;
+} Jugador;
+typedef struct
+{
+    Jugador jugadores[4]; // Máximo 4 jugadores por sala
+    int num;
+} Sala;
+typedef struct
+{
+    Sala salas [20]; // Hay 20 salas como mucho
+    int num;
+} ListaSalas;
+
+ListaSalas miListaSalas;
+/*
+int PonSala(ListaSalas *lista, char usuario[20], char invitado[20])
+{
+	// Crea una sala si el usuario no estaba previamente en una, y ademas mete al jugador invitado
+	// 1 si se ha creado sala
+    int salaUsuario = BuscaSalaUsuario(lista, usuario);
+	if (salaUsuario == -1) // El usuario no está en una sala
+	{
+		// Creamos sala
+		lista->salas[lista->num].jugadores[0].nombre = usuario;
+		lista->salas[lista->num].jugadores[1].nombre = invitado;
+	}
+	else // El usuario ya estaba en una sala
+	{
+		// Metemos al invitado en la sala que estaba el usuario si el invitado no esta en una sala
+		int salaInvitado = BuscaSalaUsuario(lista, invitado);
+		if (salaInvitado == -1) // El invitado no estaba en ninguna sala
+		{
+			int posicion = lista->salas[salaUsuario].num
+			lista->salas[salaUsuario].jugadores[lista->salas[salaUsuario].num].nombre = invitado; // Metemos al invitado en la siguiente posición
+		}
+	}
+} */
+int CreaSala(ListaSalas *lista, char usuario[20])
+{
+	// Crea una sala si el usuario no esta ya en una sala
+	// -1 si no hay espacio para mas salas
+	// x si ha podido crear la sala siendo x el numero de sala
+
+	int posicion;
+	if (lista->num == 20) return -1; // No se pueden crear más salas
+	else
+	{
+		posicion = lista->num; // Posicion en el vector de salas en la que vamos a insertar la nueva sala
+		strcpy(lista->salas[posicion].jugadores[0].nombre, usuario); // El usuario que crea la sala
+		printf("Usuario: %s se ha metido en la sala %d\n", lista->salas[posicion].jugadores[0].nombre, posicion);
+		lista->salas[posicion].num = 1; // Hay un jugador en la nueva sala
+		lista->num++; // Incrementamos en 1 el numero de salas que hay
+	}
+	return posicion;
+}
+int EliminarSala(ListaSalas *lista, int sala)
+{
+	// Elimina la sala que le pasemos
+	// -1 si no existe
+	// 0 si la elimina
+
+	lista->salas[sala] = lista->salas[sala+1];
+	lista->num--; // Restamos 1 al numero de salas
+	return 0;
+}
+int PonUsuarioSala(ListaSalas *lista, char usuario[20], int sala)
+{
+	// Mete a un usuario en una sala
+	// 0 si lo mete
+	// -1 si sala llena
+	// -2 si lista de salas llena
+
+	if (lista->salas[sala].num == 4) return -1; // Sala llena
+	else if (lista->num == 20) return -2;// Servidor lleno, no pueden haber más salas
+
+	int posicion = lista->salas[sala].num; // Buscamos la posicion en la que hay que meter a cada jugador
+	strcpy(lista->salas[sala].jugadores[posicion].nombre,usuario); // Guardamos el nombre
+	lista->salas[sala].num++; // Sumamos 1 al numero de jugadores en esa sala
+	return 0;
+}
+int SacaUsuarioSala(ListaSalas *lista, char usuario[20])
+{
+	// Saca a un jugador de la sala en la que esté
+	// -1 no encuentra al jugador
+	// 0 si lo saca
+
+	int sala = BuscaSalaUsuario(lista, usuario);
+	printf("sala en SacaUsuarioSala: %d\n", sala);
+	int posicion = BuscaUsuario(lista,usuario, sala);
+    printf("posicion en SacaUsuarioSala: %d\n", posicion);
+	if (sala == -1) 
+	{
+		printf("El jugador no esta en ninguna sala\n");
+		return -1; // El jugador no está en ninguna sala
+	}
+	else
+	{
+		for (int i = posicion; i < lista->num; i++)
+        {
+            // En la posicion del Eliminado copiamos la información del siguiente en la lista
+            lista->salas[sala].jugadores[i] = lista->salas[sala].jugadores[i + 1];
+        }
+		miListaSalas.salas[sala].num--;// Se reduce en 1 el numero de jugadores en esa sala
+		printf("Se ha sacado al jugador %s de la sala\n", usuario);
+	}
+	return 0;
+}
+int BuscaSalaUsuario(ListaSalas *lista, char usuario[20])
+{
+	// Busca a un usuario en la lista de salas
+	// -1 si no lo encuentra
+	// x si lo encuentra, siendo x la sala en la que está
+
+	int encontrado = 0;
+	int i = 0;
+	printf("Hay %d salas\n", lista->num);
+	while (i < lista->num && !encontrado) // Buscamos en todas las salas
+	{
+		int j = 0;
+		printf("Hay %d jugadores en la sala %d\n", lista->salas[i].num, i);
+		while (j < lista->salas[i].num && !encontrado) // Buscamos entre todos los jugadores
+		{
+			if (strcmp(lista->salas[i].jugadores[j].nombre, usuario) == 0) encontrado = 1;
+		}
+		if (!encontrado) i++; // si no lo encontramos pasamos a la siguiente sala
+	}
+
+	if (encontrado) return i;
+	else return -1;
+}
+int BuscaUsuario (ListaSalas *lista, char usuario[20], int sala)
+{
+	// Busca dentro de una sala a un usuario
+	// -1 si no lo encuentra
+	// x si lo encuentra donde x es la posicion
+	
+	int encontrado = 0;
+	int i = 0;
+	while (i < lista->salas[sala].num && !encontrado) // Buscamos entre todos los jugadores de una misma sala
+	{
+		if (strcmp(lista->salas[sala].jugadores[i].nombre, usuario) == 0) encontrado = 1;
+		if (!encontrado) i++; // si no lo encontramos pasamos a la siguiente sala
+	}
+
+	if (encontrado) return i;
+	else return -1;
+
+}
+void DameJugadores(ListaSalas *lista, char jugadores[800], int sala)
+{
+    // Escribe en jugadores el número de jugadores y sus nombres de una sala
+    // "3/Pol/Joan/Alonso"
+
+	jugadores[0] = '\0'; // Reiniciamos el vector
+
+    sprintf(jugadores, "%d", lista->salas[sala].num);
+    if (lista->num == 0) printf("No queda nadie en la sala %d\n", sala);
+    for (int i = 0; i < lista->salas[sala].num + 1; i++)
+    {
+		sprintf(jugadores, "%s/%s",jugadores, lista->salas[sala].jugadores[i].nombre);
+		printf("%s esta en sala\n", lista->salas[sala].jugadores[i].nombre);
+    }
+	printf("%s\n",jugadores);
+}
+
 int Pon(ListaConectados *lista, char nombre[20], int socket)
 {
 	// Añade nuevo conectado
     // Return 0 si OK
     //       -1 si no hay sitio en la lista
+	//		 -2 si ya estaba en la lista de conectados
     if (lista->num == 800) return -1;
+	else if (DamePosicion(lista, nombre) != -1/*Si no devuelve -1 significa que ha encontrado a un usuario con ese nombre*/) return -2;
     else
     {
         strcpy(lista->conectados[lista->num].nombre, nombre);
@@ -63,7 +234,7 @@ int DamePosicion(ListaConectados *lista, char nombre[20])
     // Devuelve posición o -1 si no está en la lista
     int i = 0;
     int encontrado = 0;
-	printf("Lista num %d\n", lista->num);
+	printf("Hay %d conectados\n", lista->num);
     while(!encontrado && i < lista->num)
     {
 		printf("Nombre input en DamePosicion %s\n", nombre);
@@ -193,6 +364,8 @@ void *AtenderCliente(void *socket)
 	char peticion[512];
 	char respuesta[512];
 	char notificacion[800];
+	char notificacionInvitacion[800];
+	char notificacionSala[800];
 
 	int err;
 	MYSQL *conn;
@@ -225,7 +398,13 @@ void *AtenderCliente(void *socket)
 	char nombre[20] = "\0";
 	char password[20];
 
+	char nombreUsuario[20] = "\0";
+	char nombreInvitado[20] = "\0";
+	int sala;
+
+
 	char conectados[800];
+	char jugadores[800];
 	// Entramos en un bucle para atender todas las peticiones de este cliente hasta que se desconecte
 	while (terminar == 0)
 	{
@@ -241,6 +420,7 @@ void *AtenderCliente(void *socket)
 		// vamos a ver que quiere el cliente
 		char *p = strtok( peticion, "/");
 		int codigo =  atoi (p);
+		printf("Codigo: %d\n",codigo);
 		
 		if (codigo != 0 && codigo < 4) // Codigo 0 es desconectar, codigo > 4 no hace falta nombre ni password 
 		{
@@ -252,10 +432,22 @@ void *AtenderCliente(void *socket)
 
 			printf ("Codigo: %d, Nombre: %s Password: %s\n", codigo, nombre, password);
 		}
+		else if (codigo == 10 || codigo == 11 || codigo == 12 || codigo == 13)
+		{
+			p = strtok( NULL, "/");
+			strcpy (nombreUsuario, p);
+			printf("Usuario: %s\n", nombreUsuario);
 
+		 	if (codigo != 12 && codigo != 10)
+			{
+				p = strtok( NULL, "/");
+				sala = atoi(p);
+				printf("Sala: %d\n", sala);
+			}
+		}
 		if (codigo == 0) // Peticion de desconexion
 		{
-			printf("Usuario se ha desconectado\n");
+			printf("Cliente se ha desconectado\n");
 			terminar = 1;
 
 			// Quitar de la lista de conectados si se ha conectado
@@ -276,9 +468,7 @@ void *AtenderCliente(void *socket)
 			for (int j=0; j < i; j++) // Para cada cliente conectado
 				write (sockets[j],notificacion, strlen(notificacion));
 
-			// sprintf(respuesta, "0/0"); // Parche para que el cliente no crashee, no tiene otra utilidad
-			
-		}	
+		}
 		else if (codigo == 1) // Sign up
 		{
 			strcpy(consulta,"SELECT MAX(Identificador) FROM Jugadores");
@@ -365,27 +555,34 @@ void *AtenderCliente(void *socket)
 			{
 				if(strcmp(row[0],password) == 0) // Coincide contraseña 
 				{
-					// Quitamos de la lista si está logeado con otro usuario
-					//EliminaSocket(&miListaConectados, sock_conn);
-
-					printf("Inicio sesion correctamente\n");
-					sprintf(respuesta, "2/1");
-
-					// Insertamos en la lista de conectados
+					// Intentamos insertar en la lista de conectados
 					int resultado = Pon(&miListaConectados, nombre, sock_conn/*Socket en el que se conecta*/);
-					if (resultado == -1) printf("No se ha podido insertar a %s en la lista de conectados\n", nombre);
-					else printf("Se ha insertado a %s en conectados\n", nombre);
+					if (resultado == -1)
+					{
+						printf("No se ha podido insertar a %s en la lista de conectados (Lista llena)\n", nombre);
+						sprintf(respuesta, "2/5");
+					}
+					else if (resultado == -2)
+					{
+						printf("No se ha podido insertar a %s en la lista de conectados (ya estaba conectado)\n", nombre);
+						sprintf(respuesta, "2/4");
+					} 
+					else
+					{
+						printf("Inicio sesion correctamente\n");
+						sprintf(respuesta, "2/1");
 
-					// Notificacion automatica de conectados
-					DameConectados(&miListaConectados, conectados);
-					sprintf(notificacion, "9/%s", conectados);
-					printf(conectados);
-					printf("\n");
+						printf("Se ha insertado a %s en conectados\n", nombre);
 
-					
-					for (int j=0; j < i; j++) // Para cada cliente conectado
-						write (sockets[j],notificacion, strlen(notificacion));
-					
+						// Notificacion automatica de conectados
+						DameConectados(&miListaConectados, conectados);
+						sprintf(notificacion, "9/%s", conectados);
+						printf(conectados);
+						printf("\n");
+						
+						for (int j=0; j < i; j++) // Para cada cliente conectado
+							write (sockets[j],notificacion, strlen(notificacion));
+					}
 				}
 				else 
 				{
@@ -451,7 +648,7 @@ void *AtenderCliente(void *socket)
 						// Lo quitamos de la lista de conectados
 						int resultado = Elimina (&miListaConectados, nombre);
 						if(resultado == -1) printf("Error al quitar de la lista de conectados (Posiblemente no hayas logged in)\n");
-						else printf("Se ha quitado a %s de la lista de conectados", nombre);
+						else printf("Se ha quitado a %s de la lista de conectados\n", nombre);
 
 						// Notificacion automatica de conectados
 						char notificacion[800];
@@ -462,6 +659,7 @@ void *AtenderCliente(void *socket)
 
 						for (int j=0; j < i; j++) // Para cada cliente conectado
 							write (sockets[j],notificacion, strlen(notificacion));
+						
 					}
 				}
 				else{
@@ -558,13 +756,59 @@ void *AtenderCliente(void *socket)
    			// Imprimir el número aleatorio guardado en el string
     		printf("El numero aleatorio es: %s\n", respuesta);
 		}
-		if (codigo != 0)
+		else if (codigo == 10) // Crear sala
+		{
+			// Usuario crea una sala en la que va a poder invitar a conectados
+			sala = CreaSala(&miListaSalas, nombreUsuario);
+			if (sala == -1) sprintf(respuesta, "10/-1");
+			else sprintf(respuesta, "10/%d", sala);
+		}
+		else if (codigo == 11) // Invitar a sala
+		{
+			// Enviamos notificación de invitación al invitado con todos los nombres de los jugadores en la sala
+			// 11/(int numero de sala)/(int numero de jugadores)/Pol/Joan/Alonso
+			int posicion = DamePosicion(&miListaConectados, nombreUsuario); // Buscamos al usuario invitado
+			int socketInvitado = miListaConectados.conectados[posicion].socket;
+
+			DameJugadores(&miListaSalas, jugadores, sala);
+
+			sprintf(notificacionInvitacion, "11/%d", sala);
+			sprintf(notificacionInvitacion, "%s/%s", notificacionInvitacion, jugadores);
+			write (socketInvitado, notificacionInvitacion, strlen(notificacionInvitacion));
+		}
+		else if (codigo == 12) // Abandonar sala
+		{
+			SacaUsuarioSala(&miListaSalas, nombreUsuario);
+		}
+		else if (codigo == 13) // Entrar a sala
+		{
+			PonUsuarioSala(&miListaSalas, nombreUsuario, sala);
+
+			// Enviamos notificacion a todos los usuarios conectados a esa sala
+			// Les damos los nombres de los jugadores que hay conectados
+
+			for (int i = 0; i < miListaSalas.salas[sala].num + 1; i++) // Para cada jugador en la sala
+			{
+				printf("Buscamos al jugador %s\n", miListaSalas.salas[sala].jugadores[i]);
+				int posicion = DamePosicion(&miListaConectados, &miListaSalas.salas[sala].jugadores[i]); // Buscamos jugador en conectados
+				int socketJugador = miListaConectados.conectados[posicion].socket; // Buscamos su socket
+
+				DameJugadores(&miListaSalas, jugadores, sala);
+				
+				sprintf(notificacionSala, "14/%d", sala);
+				sprintf(notificacionSala, "%s/%s", notificacionSala, jugadores);
+				write (socketJugador, notificacionSala, strlen(notificacionSala));
+			}
+
+		}
+		if (codigo != 0 && codigo != 12 && codigo != 13)
 		{
 			printf("Respuesta: %s\n", respuesta);
-			printf("Notificacion: %s\n", notificacion);
 			// Enviamos respuesta
 			write (sock_conn,respuesta, strlen(respuesta));
 		}
+		if (codigo == 0 || codigo == 2 || codigo == 3) printf("Notificacion: %s\n", notificacion);
+		
 	}
 	// Se acabo el servicio para este cliente
 	close(sock_conn);
@@ -591,29 +835,31 @@ int main(int argc, char *argv[])
 	// Establecemos el puerto de escucha
 	serv_adr.sin_port = htons(puerto);
 
-	// Ya no hace falta -> Forzamos el puerto, si no esta en uso anteriormente salta error con el comando fuser
-	// Ya no hace falta -> bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr));
-	
-	// Reiniciamos el puerto de escucha
-    const char *comando = "fuser -k -n tcp 50010"; // fuser -k -n tcp 9050 o tambien fuser -k -n 9050/tcp
-
-    // Ejecutar el comando
-    int resultado = system(comando);
-
-    // Verificar si la ejecucion fue exitosa
-
-    if (resultado == -1) 
-	{
-        perror("Error al ejecutar el comando\n");
-    } 
-	else
-	{
-        printf("Puerto 50010 en TCP liberado.\n");
-    }
-
 	//Bind
-	if (bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr)) < 0) printf ("Posible error al bind\n");
-	if (listen(sock_listen, 3) < 0) printf("Error en el Listen\n");
+	if (bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr)) < 0)
+	{
+		printf ("Posible error al bind (Si no funciona reinicia la maquina virtual)\n");
+		// Reiniciamos el puerto de escucha
+		//const char *comando = "fuser -k -n tcp 50010"; // fuser -k -n tcp 50010 o tambien fuser -k -n 50010/tcp ---- Producción
+		const char *comando = "fuser -k -n tcp 9050"; // fuser -k -n tcp 9050 o tambien fuser -k -n 9050/tcp ---- Desarrollo
+
+		// Ejecutar el comando
+		int resultado = system(comando);
+
+		// Verificar si la ejecucion fue exitosa
+
+		if (resultado == -1) 
+		{
+			perror("Error al ejecutar el comando\n");
+		} 
+		else
+		{
+			//printf("Puerto 50010 en TCP liberado.\n"); // Producción
+			printf("Puerto 9050 en TCP liberado.\n"); // Desarrollo
+		}
+	}
+
+	if (listen(sock_listen, 3) < 0) printf("Error en el Listen\n"); // Si tarda demasiado en responder
 	
 	contador = 0;
 	i = 0;
