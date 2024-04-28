@@ -29,7 +29,7 @@ Verificada por Joan Fusté
 Comunicada por Emmanuel Alonso Mendoza Cobeña
 URL: https://youtu.be/fqNjztHip9U
 
-Pendiente (Requisitos a implementar en esta versión)
+
 
 -
 
