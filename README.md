@@ -25,6 +25,7 @@ URL: https://youtu.be/DkznW4e-Q5Q
 Verision 4
 
 generado por Pol Miró
+Verificada por Joan Fusté
 
 Pendiente (Requisitos a implementar en esta versión)
 
