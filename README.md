@@ -24,11 +24,10 @@ URL: https://youtu.be/DkznW4e-Q5Q
 
 Verision 4
 
-generado por Pol Miró
-Verificada por Joan Fusté
-Comunicada por Emmanuel Alonso Mendoza Cobeña
+generado por Pol Miró 
+Verificada por Joan Fusté 
+Comunicada por Emmanuel Alonso Mendoza Cobeña 
 URL: https://youtu.be/fqNjztHip9U
-
 
 Pendiente (Requisitos a implementar en esta versión)
 
