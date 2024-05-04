@@ -12,6 +12,7 @@ using System.Collections;
 using System.Security.Cryptography;
 using System.IO;
 using System.Threading;
+using System.Reflection.Emit;
 
 
 
@@ -24,16 +25,23 @@ namespace WindowsFormsApplication1
         Thread atender;
         Socket server;
         
-        int numCartaRandom; // Provisional
+        int numCartaRandom;
         bool nuevaCarta = false;
 
         string usuario;
+        string password;
+        bool sesionIniciada = false;
+
+        int sala;
+        bool enSala;
+        string[] jugadores;
 
         public Form1()
         {
             InitializeComponent();
-            //CheckForIllegalCrossThreadCalls = false; // Necesario para que los elementos de los formularios puedan ser
-                                                       // accedidos desde threads diferentes a los que los crearon
+
+            // Suscribirse al evento CellDoubleClick del DataGridView
+            dataGridViewConectados.CellDoubleClick += DataGridViewConectados_CellDoubleClick;
         }
         public void GuardaCarta(string mensaje)
         {
@@ -45,7 +53,7 @@ namespace WindowsFormsApplication1
             while (true)
             {
                 //Recibimos mensaje del servidor
-                byte[] msg2 = new byte[80];
+                byte[] msg2 = new byte[800];
                 server.Receive(msg2);
                 string[] trozos = Encoding.ASCII.GetString(msg2).Split('/');
                 //for (int i = 0; i < trozos.Length; i++)
@@ -61,35 +69,78 @@ namespace WindowsFormsApplication1
                         if (mensaje == "1") // 1 si el server ha podido registrarlo
                             MessageBox.Show("Succesfully registered!" + Carita);
                         else if (mensaje == "2")
-                            MessageBox.Show("Unable to create account, user " + nombre.Text + " alredy exists");
+                            MessageBox.Show("Unable to create account, user " + textBoxNombre.Text + " alredy exists");
                         break;
                     case 2:  // Log in
 
                         if (mensaje == "1") // Server ha podido logearlo
                         {
                             MessageBox.Show("Logged In! " + Carita);
-                            usuario = nombre.Text;
+
+                            sesionIniciada = true;
 
                             // Como no el objeto no es creado por el mismo thread tenemos que usar este metodo
                             dataGridViewConectados.Invoke(new Action(() =>
                             {
+                                // Escodemos menu para sign up y log in
+                                labelName.Visible = false;
+                                labelPassword.Visible = false;
+                                textBoxNombre.Visible = false;
+                                textBoxPassword.Visible = false;
+
+                                radioSingUp.Visible = false;
+                                radioLogIn.Visible = false;
+
+                                // Mostramos menu de usuario conectados
                                 labelConectados.Visible = true;
                                 dataGridViewConectados.Visible = true;
+                                labelUsuario.Text = "Usuario: " + usuario; // mostramos que usuario está conectado
+                                labelUsuario.Location = new Point(24, 29);
+                                labelUsuario.Visible = true;
+
+                                buttonCrearSala.Visible = true;
+                                buttonCrearSala.Location = new Point(560, 26);
                             }));
                         }
                         else if (mensaje == "2") // Pasword incorrecto
                             MessageBox.Show("Unable to Log In, password does not match!");
                         else if (mensaje == "3") // No existe el usuario
-                            MessageBox.Show("Unable to Log In, user " + nombre.Text + " does not exist. Try to Sing Up!");
+                            MessageBox.Show("Unable to Log In, user " + textBoxNombre.Text + " does not exist. Try to Sing Up!");
+                        else if(mensaje == "4") // Usuario ya ha iniciado sesion
+                            MessageBox.Show("Unable to Log In, user " + textBoxNombre.Text + " has already logged with another client!");
+                        else if (mensaje == "5") // Usuario ya ha iniciado sesion
+                            MessageBox.Show("The server is full");
+
                         break;
                     case 3: // Remove
 
                         if (mensaje == "1") // 1 si el server ha podido eliminar la cuenta
+                        {
                             MessageBox.Show("Account deleted " + Carita);
+
+                            labelName.Invoke(new Action(() =>
+                            {
+                                // Mostramos menu para sign up y log in
+                                labelName.Visible = true;
+                                labelPassword.Visible = true;
+                                textBoxNombre.Visible = true;
+                                textBoxPassword.Visible = true;
+
+                                radioSingUp.Visible = true;
+                                radioLogIn.Visible = true;
+
+                                // Mostramos menu de usuario conectados
+                                labelConectados.Visible = false;
+                                dataGridViewConectados.Visible = false;
+                                labelUsuario.Visible = false;
+                                sesionIniciada = false;
+                            }
+                            ));
+                        }
                         else if (mensaje == "2")
                             MessageBox.Show("Password does not match!");
                         else if (mensaje == "3")
-                            MessageBox.Show("User " + nombre.Text + " does not exist.");
+                            MessageBox.Show("User " + textBoxNombre.Text + " does not exist.");
                         break;
                     case 4: // SELECT mas partidas
 
@@ -136,8 +187,114 @@ namespace WindowsFormsApplication1
                         }));
                         
                         break;
+                    case 10: // Sala que nos asigna el server
+
+                        if (Convert.ToInt32(trozos[1]) == -1) MessageBox.Show("Servidor lleno, no se ha podido crear sala");
+                        else
+                        {
+                            labelSala.Invoke(new Action(() =>
+                            {
+                                labelSala.Text = "Sala: " + trozos[1];
+                                labelSala.Visible = true;
+                                buttonCrearSala.Visible = false; // Ya no podemos crear sala si nos metemos en una
+                                buttonAbandonar.Visible = true;
+                                buttonAbandonar.Location = new Point(560, 26);
+                            }));
+                        }
+                        break;
+
+                    case 11: // Recibimos invitacion a sala
+
+                        sala = Convert.ToInt32(trozos[1]);
+                        int numJugadores = Convert.ToInt32(trozos[2]); // En la segunda posicion nos pasan cuantos jugadores hay en la sala
+
+                        string[] nombres = new string[numJugadores];
+                        for (int i = 0; i<numJugadores; i++)
+                        {
+                            nombres[i] = trozos[i+3];
+                        }
+
+                        FormAceptarInvitacion form = new FormAceptarInvitacion(sala, nombres);
+                        form.AceptarClicked += Form_AceptarClicked; 
+                        // Mostrar el formulario
+                        form.ShowDialog();
+                        break;
+
+                    case 12: // Confirmacion de abandono de sala
+
+                        break;
+
+                    case 13: // Confirmacion entrada a sala
+
+                        break;
+                    case 14: // Notificacion Jugadores en sala
+                        // 14/(int num sala)/(int num jugadores)/Pol/Joan/Alonso
+                        sala = Convert.ToInt32(trozos[1]);
+                        numJugadores = Convert.ToInt32(trozos[2]); // En la segunda posicion nos pasan cuantos jugadores hay en la sala
+
+                        jugadores = new string[numJugadores];
+
+                        for (int i = 0; i < numJugadores; i++)
+                        {
+                            jugadores[i] = trozos[i + 3];
+                        }
+                        if (numJugadores > 0)
+                        {
+                            labelYourCards.Invoke(new Action(() =>
+                            {
+                                labelYourCards.Text = jugadores[0];
+                                labelYourCards.Visible = true;
+                            }));
+                            if (numJugadores > 1)
+                            {
+                                labelYourCards.Invoke(new Action(() =>
+                                {
+                                    labelPlayer2.Text = jugadores[1];
+                                    labelPlayer2.Visible = true;
+
+                                }));
+                                if (numJugadores > 2)
+                                {
+                                    labelYourCards.Invoke(new Action(() =>
+                                    {
+                                        labelPlayer3.Text = jugadores[2];
+                                        labelPlayer3.Visible = true;
+
+                                    }));
+                                    if (numJugadores == 4)
+                                    {
+                                        labelYourCards.Invoke(new Action(() =>
+                                        {
+                                            labelPlayer4.Text = jugadores[4];
+                                            labelPlayer4.Visible = true;
+
+                                        }));
+                                    }
+                                }
+                            }
+                        }
+                        break;
                 }
             }
+        }
+        private void Form_AceptarClicked(object sender, EventArgs e)
+        {
+            // Usuario acepta invitación a sala
+            // Enviamos mensaje al servidor para entrar a esa sala
+
+            string mensaje = "13/" + usuario + "/" + sala; // Pasamos la sala a la que nos unimos y nuestro nombre
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+            buttonCrearSala.Invoke(new Action(() =>
+            { 
+                buttonCrearSala.Visible = false; // Ya no podemos crear sala si nos metemos en una
+                buttonAbandonar.Location = new Point(560, 26);
+                buttonAbandonar.Visible = true;
+                labelSala.Text = "Sala: " + sala.ToString();
+                labelSala.Visible = true;
+                MessageBox.Show("Ya podeis empezar partida!");
+            }));
+            enSala = true;
         }
         private void Connect_Click(object sender, EventArgs e)
         {
@@ -199,25 +356,32 @@ namespace WindowsFormsApplication1
             if (conectado)
             {
                 // Encriptamos el password
-                string passwordEncriptado = ObtenerHashSHA256(password.Text).Substring(0, 10);
+                string passwordEncriptado = ObtenerHashSHA256(textBoxPassword.Text).Substring(0, 10);
 
-                if (SingUp.Checked)
+                if (radioSingUp.Checked)
                 {
                     // Construimos y enviamos mensaje
-                    string mensaje = "1/" + nombre.Text + "/" + passwordEncriptado;
+                    string mensaje = "1/" + textBoxNombre.Text + "/" + passwordEncriptado;
                     byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                     server.Send(msg);
                 }
-                else if (LogIn.Checked)
+                else if (radioLogIn.Checked)
                 {
-                    string mensaje = "2/" + nombre.Text + "/" + passwordEncriptado;
-                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    string mensaje;
+                    byte[] msg;
+                    // Tenemos que desconectar al usuario que había antes conectado
+                    // sin cerrar por completo la conexión con el servidor
+
+                    usuario = textBoxNombre.Text; // Guardamos el nombre del usuario que inicia sesión
+                    password = passwordEncriptado; // Guardamos el password del usuario que inicia sesión
+                    mensaje = "2/" + textBoxNombre.Text + "/" + passwordEncriptado;
+                    msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                     server.Send(msg);
                 }
-                else if (Remove.Checked)
+                else if (radioRemove.Checked)
                 {
                     // Enviamos peticion eliminar cuenta
-                    string mensaje = "3/" + nombre.Text + "/" + passwordEncriptado;
+                    string mensaje = "3/" + textBoxNombre.Text + "/" + passwordEncriptado;
                     byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                     server.Send(msg);
                 }
@@ -244,8 +408,21 @@ namespace WindowsFormsApplication1
                 server.Close();
 
                 conectado = false;
+
+                // Mostramos menu para sign up y log in
+                labelName.Visible = true;
+                labelPassword.Visible = true;
+                textBoxNombre.Visible = true;
+                textBoxPassword.Visible = true;
+
+                radioSingUp.Visible = true;
+                radioLogIn.Visible = true;
+
+                // Mostramos menu de usuario conectados
                 labelConectados.Visible = false;
                 dataGridViewConectados.Visible = false;
+                labelUsuario.Visible = false;
+                sesionIniciada = false;
             }
             else
             {
@@ -309,12 +486,12 @@ namespace WindowsFormsApplication1
         bool partidaEmpezada = false;
         private void EmpezarPartida_Click(object sender, EventArgs e)
         {
-            if (conectado && !partidaEmpezada)
+            if (conectado && !partidaEmpezada && enSala)
             {
                 partidaEmpezada = true;
+                labelYourCards.Text = usuario;
+                labelPlayer2.Text = invitado;
                 labelYourCards.Visible = true; // Mostramos el label de las cartas del jugador
-                if (nombre.Text == string.Empty) labelYourCards.Text = labelYourCards.Text + " ( noname )";
-                else labelYourCards.Text = labelYourCards.Text + " (" + nombre.Text + ")";
 
                 // Repartimos Cartas Iniciales
                 int[] cartas = new int[20]; // en este vector se guarda los id de las cartas, max 20 cartas
@@ -392,10 +569,47 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("You must be connected in order to send messages to the server");
             }
         }
-
-        private void Player2_Click(object sender, EventArgs e)
+        string invitado;
+        private void DataGridViewConectados_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            // Verificar si se hizo doble clic en una celda válida
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && enSala)
+            {
+                invitado = (dataGridViewConectados.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()).TrimEnd('\0');
+                FormInvitar formInvitar = new FormInvitar(invitado);
+                formInvitar.InvitarClicked += FormInvitar_InvitarClicked;
+                formInvitar.ShowDialog();
+            }
+            else if (!enSala) MessageBox.Show("Debes estar en sala para poder invitar");
+        }
+        private void FormInvitar_InvitarClicked(object sender, EventArgs e)
+        {
+            // Si queremos invitar al usuario que hemos seleccionado enviamos invitación
 
+            string mensaje = "11/" + invitado + "/" + sala; // Un miembro de la sala invita a otro usuario
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+        }
+        private void buttonAbandonar_Click(object sender, EventArgs e)
+        {
+            string mensaje = "12/" + usuario; // El usuario abandona la sala
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+
+            buttonAbandonar.Visible = false;
+            buttonCrearSala.Visible = true;
+            labelSala.Visible = false;
+        }
+
+        private void buttonCrearSala_Click(object sender, EventArgs e)
+        {
+            // Enviamos al server peticion para unirnos a una sala
+
+            string mensaje = "10/" + usuario; // Pasamos nombre y sala
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+
+            enSala = true;
         }
     }
 }

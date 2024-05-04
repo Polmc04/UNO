@@ -22,9 +22,13 @@ Verificada por Emmanuel Alonso Mendoza Cobeña
 comunicada por Pol Miró
 URL: https://youtu.be/DkznW4e-Q5Q
 
-Verision 3
+Verision 4
 
 generado por Pol Miró
+Verificada por Joan Fusté
+Comunicada por Emmanuel Alonso Mendoza Cobeña
+URL: https://youtu.be/fqNjztHip9U
+
 
 Pendiente (Requisitos a implementar en esta versión)
 
@@ -32,13 +36,14 @@ Pendiente (Requisitos a implementar en esta versión)
 
 Avances (Requisitos del proyecto):
 
--
+-Invitar a otros conectados + aceptar/rechazar + empezar partida (crear salas)
+
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
--La conexión entre cliente y servidor ya funciona a la primera
+-
 
 Errores detectados:
 
--Te puedes logear con más de una cuenta en un mismo form
+-
 
 

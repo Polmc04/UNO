@@ -28,16 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label2 = new System.Windows.Forms.Label();
-            this.nombre = new System.Windows.Forms.TextBox();
+            this.labelName = new System.Windows.Forms.Label();
+            this.textBoxNombre = new System.Windows.Forms.TextBox();
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.Remove = new System.Windows.Forms.RadioButton();
-            this.password = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.LogIn = new System.Windows.Forms.RadioButton();
-            this.SingUp = new System.Windows.Forms.RadioButton();
+            this.radioRemove = new System.Windows.Forms.RadioButton();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
+            this.labelPassword = new System.Windows.Forms.Label();
+            this.labelUsuario = new System.Windows.Forms.Label();
+            this.radioLogIn = new System.Windows.Forms.RadioButton();
+            this.radioSingUp = new System.Windows.Forms.RadioButton();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.MasPartidas = new System.Windows.Forms.Button();
             this.MasELO = new System.Windows.Forms.Button();
@@ -49,26 +50,29 @@
             this.labelPlayer3 = new System.Windows.Forms.Label();
             this.labelConectados = new System.Windows.Forms.Label();
             this.dataGridViewConectados = new System.Windows.Forms.DataGridView();
+            this.labelSala = new System.Windows.Forms.Label();
+            this.buttonAbandonar = new System.Windows.Forms.Button();
+            this.buttonCrearSala = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConectados)).BeginInit();
             this.SuspendLayout();
             // 
-            // label2
+            // labelName
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(24, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(61, 24);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Name";
+            this.labelName.AutoSize = true;
+            this.labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.labelName.Location = new System.Drawing.Point(24, 29);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(55, 20);
+            this.labelName.TabIndex = 1;
+            this.labelName.Text = "Name";
             // 
-            // nombre
+            // textBoxNombre
             // 
-            this.nombre.Location = new System.Drawing.Point(169, 34);
-            this.nombre.Name = "nombre";
-            this.nombre.Size = new System.Drawing.Size(164, 20);
-            this.nombre.TabIndex = 3;
+            this.textBoxNombre.Location = new System.Drawing.Point(169, 34);
+            this.textBoxNombre.Name = "textBoxNombre";
+            this.textBoxNombre.Size = new System.Drawing.Size(164, 20);
+            this.textBoxNombre.TabIndex = 3;
             // 
             // btnConnect
             // 
@@ -96,14 +100,15 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.groupBox1.Controls.Add(this.Remove);
-            this.groupBox1.Controls.Add(this.password);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.LogIn);
-            this.groupBox1.Controls.Add(this.SingUp);
+            this.groupBox1.Controls.Add(this.radioRemove);
+            this.groupBox1.Controls.Add(this.textBoxPassword);
+            this.groupBox1.Controls.Add(this.labelPassword);
+            this.groupBox1.Controls.Add(this.labelUsuario);
+            this.groupBox1.Controls.Add(this.radioLogIn);
+            this.groupBox1.Controls.Add(this.radioSingUp);
             this.groupBox1.Controls.Add(this.btnSend);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.nombre);
+            this.groupBox1.Controls.Add(this.labelName);
+            this.groupBox1.Controls.Add(this.textBoxNombre);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(341, 204);
@@ -111,59 +116,70 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Peticion";
             // 
-            // Remove
+            // radioRemove
             // 
-            this.Remove.AutoSize = true;
-            this.Remove.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Remove.Location = new System.Drawing.Point(28, 165);
-            this.Remove.Name = "Remove";
-            this.Remove.Size = new System.Drawing.Size(189, 24);
-            this.Remove.TabIndex = 11;
-            this.Remove.TabStop = true;
-            this.Remove.Text = "Remove my account =(";
-            this.Remove.UseVisualStyleBackColor = true;
+            this.radioRemove.AutoSize = true;
+            this.radioRemove.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioRemove.Location = new System.Drawing.Point(28, 165);
+            this.radioRemove.Name = "radioRemove";
+            this.radioRemove.Size = new System.Drawing.Size(189, 24);
+            this.radioRemove.TabIndex = 11;
+            this.radioRemove.TabStop = true;
+            this.radioRemove.Text = "Remove my account =(";
+            this.radioRemove.UseVisualStyleBackColor = true;
             // 
-            // password
+            // textBoxPassword
             // 
-            this.password.Location = new System.Drawing.Point(170, 60);
-            this.password.Name = "password";
-            this.password.Size = new System.Drawing.Size(164, 20);
-            this.password.TabIndex = 10;
-            this.password.UseSystemPasswordChar = true;
+            this.textBoxPassword.Location = new System.Drawing.Point(170, 60);
+            this.textBoxPassword.Name = "textBoxPassword";
+            this.textBoxPassword.Size = new System.Drawing.Size(164, 20);
+            this.textBoxPassword.TabIndex = 10;
+            this.textBoxPassword.UseSystemPasswordChar = true;
             // 
-            // label1
+            // labelPassword
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(24, 60);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 24);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Password";
+            this.labelPassword.AutoSize = true;
+            this.labelPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.labelPassword.Location = new System.Drawing.Point(24, 60);
+            this.labelPassword.Name = "labelPassword";
+            this.labelPassword.Size = new System.Drawing.Size(86, 20);
+            this.labelPassword.TabIndex = 9;
+            this.labelPassword.Text = "Password";
             // 
-            // LogIn
+            // labelUsuario
             // 
-            this.LogIn.AutoSize = true;
-            this.LogIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LogIn.Location = new System.Drawing.Point(28, 135);
-            this.LogIn.Name = "LogIn";
-            this.LogIn.Size = new System.Drawing.Size(72, 24);
-            this.LogIn.TabIndex = 7;
-            this.LogIn.TabStop = true;
-            this.LogIn.Text = "Log In";
-            this.LogIn.UseVisualStyleBackColor = true;
+            this.labelUsuario.AutoSize = true;
+            this.labelUsuario.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUsuario.Location = new System.Drawing.Point(252, 109);
+            this.labelUsuario.Name = "labelUsuario";
+            this.labelUsuario.Size = new System.Drawing.Size(81, 20);
+            this.labelUsuario.TabIndex = 23;
+            this.labelUsuario.Text = "Usuario: ";
+            this.labelUsuario.Visible = false;
             // 
-            // SingUp
+            // radioLogIn
             // 
-            this.SingUp.AutoSize = true;
-            this.SingUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SingUp.Location = new System.Drawing.Point(28, 105);
-            this.SingUp.Name = "SingUp";
-            this.SingUp.Size = new System.Drawing.Size(88, 24);
-            this.SingUp.TabIndex = 8;
-            this.SingUp.TabStop = true;
-            this.SingUp.Text = "Sing Up!";
-            this.SingUp.UseVisualStyleBackColor = true;
+            this.radioLogIn.AutoSize = true;
+            this.radioLogIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioLogIn.Location = new System.Drawing.Point(28, 135);
+            this.radioLogIn.Name = "radioLogIn";
+            this.radioLogIn.Size = new System.Drawing.Size(72, 24);
+            this.radioLogIn.TabIndex = 7;
+            this.radioLogIn.TabStop = true;
+            this.radioLogIn.Text = "Log In";
+            this.radioLogIn.UseVisualStyleBackColor = true;
+            // 
+            // radioSingUp
+            // 
+            this.radioSingUp.AutoSize = true;
+            this.radioSingUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSingUp.Location = new System.Drawing.Point(28, 105);
+            this.radioSingUp.Name = "radioSingUp";
+            this.radioSingUp.Size = new System.Drawing.Size(88, 24);
+            this.radioSingUp.TabIndex = 8;
+            this.radioSingUp.TabStop = true;
+            this.radioSingUp.Text = "Sing Up!";
+            this.radioSingUp.UseVisualStyleBackColor = true;
             // 
             // btnDisconnect
             // 
@@ -225,18 +241,17 @@
             // labelPlayer2
             // 
             this.labelPlayer2.AutoSize = true;
-            this.labelPlayer2.Location = new System.Drawing.Point(470, 316);
+            this.labelPlayer2.Location = new System.Drawing.Point(429, 297);
             this.labelPlayer2.Name = "labelPlayer2";
             this.labelPlayer2.Size = new System.Drawing.Size(36, 13);
             this.labelPlayer2.TabIndex = 16;
             this.labelPlayer2.Text = "Player";
             this.labelPlayer2.Visible = false;
-            this.labelPlayer2.Click += new System.EventHandler(this.Player2_Click);
             // 
             // labelPlayer4
             // 
             this.labelPlayer4.AutoSize = true;
-            this.labelPlayer4.Location = new System.Drawing.Point(470, 249);
+            this.labelPlayer4.Location = new System.Drawing.Point(429, 239);
             this.labelPlayer4.Name = "labelPlayer4";
             this.labelPlayer4.Size = new System.Drawing.Size(36, 13);
             this.labelPlayer4.TabIndex = 17;
@@ -246,7 +261,7 @@
             // labelYourCards
             // 
             this.labelYourCards.AutoSize = true;
-            this.labelYourCards.Location = new System.Drawing.Point(715, 522);
+            this.labelYourCards.Location = new System.Drawing.Point(429, 327);
             this.labelYourCards.Name = "labelYourCards";
             this.labelYourCards.Size = new System.Drawing.Size(59, 13);
             this.labelYourCards.TabIndex = 18;
@@ -256,7 +271,7 @@
             // labelPlayer3
             // 
             this.labelPlayer3.AutoSize = true;
-            this.labelPlayer3.Location = new System.Drawing.Point(470, 283);
+            this.labelPlayer3.Location = new System.Drawing.Point(429, 267);
             this.labelPlayer3.Name = "labelPlayer3";
             this.labelPlayer3.Size = new System.Drawing.Size(36, 13);
             this.labelPlayer3.TabIndex = 19;
@@ -276,18 +291,61 @@
             // 
             // dataGridViewConectados
             // 
+            this.dataGridViewConectados.AllowUserToAddRows = false;
+            this.dataGridViewConectados.AllowUserToDeleteRows = false;
+            this.dataGridViewConectados.AllowUserToResizeRows = false;
+            this.dataGridViewConectados.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
             this.dataGridViewConectados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewConectados.Location = new System.Drawing.Point(175, 266);
             this.dataGridViewConectados.Name = "dataGridViewConectados";
+            this.dataGridViewConectados.ReadOnly = true;
+            this.dataGridViewConectados.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dataGridViewConectados.Size = new System.Drawing.Size(172, 214);
             this.dataGridViewConectados.TabIndex = 22;
             this.dataGridViewConectados.Visible = false;
+            // 
+            // labelSala
+            // 
+            this.labelSala.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSala.Location = new System.Drawing.Point(373, 26);
+            this.labelSala.Name = "labelSala";
+            this.labelSala.Size = new System.Drawing.Size(92, 20);
+            this.labelSala.TabIndex = 24;
+            this.labelSala.Text = "Sala:";
+            this.labelSala.Visible = false;
+            // 
+            // buttonAbandonar
+            // 
+            this.buttonAbandonar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonAbandonar.Location = new System.Drawing.Point(560, 67);
+            this.buttonAbandonar.Name = "buttonAbandonar";
+            this.buttonAbandonar.Size = new System.Drawing.Size(108, 35);
+            this.buttonAbandonar.TabIndex = 25;
+            this.buttonAbandonar.Text = "Abandonar";
+            this.buttonAbandonar.UseVisualStyleBackColor = true;
+            this.buttonAbandonar.Visible = false;
+            this.buttonAbandonar.Click += new System.EventHandler(this.buttonAbandonar_Click);
+            // 
+            // buttonCrearSala
+            // 
+            this.buttonCrearSala.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCrearSala.Location = new System.Drawing.Point(560, 26);
+            this.buttonCrearSala.Name = "buttonCrearSala";
+            this.buttonCrearSala.Size = new System.Drawing.Size(108, 35);
+            this.buttonCrearSala.TabIndex = 26;
+            this.buttonCrearSala.Text = "Crear Sala";
+            this.buttonCrearSala.UseVisualStyleBackColor = true;
+            this.buttonCrearSala.Visible = false;
+            this.buttonCrearSala.Click += new System.EventHandler(this.buttonCrearSala_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1443, 790);
+            this.Controls.Add(this.buttonCrearSala);
+            this.Controls.Add(this.buttonAbandonar);
+            this.Controls.Add(this.labelSala);
             this.Controls.Add(this.dataGridViewConectados);
             this.Controls.Add(this.labelConectados);
             this.Controls.Add(this.labelPlayer3);
@@ -303,7 +361,7 @@
             this.Controls.Add(this.btnConnect);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "UNO";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -315,17 +373,17 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox nombre;
+        private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.TextBox textBoxNombre;
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton LogIn;
-        private System.Windows.Forms.RadioButton SingUp;
+        private System.Windows.Forms.RadioButton radioLogIn;
+        private System.Windows.Forms.RadioButton radioSingUp;
         private System.Windows.Forms.Button btnDisconnect;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox password;
-        private System.Windows.Forms.RadioButton Remove;
+        private System.Windows.Forms.Label labelPassword;
+        private System.Windows.Forms.TextBox textBoxPassword;
+        private System.Windows.Forms.RadioButton radioRemove;
         private System.Windows.Forms.Button MasPartidas;
         private System.Windows.Forms.Button MasELO;
         private System.Windows.Forms.Button ColorCarta;
@@ -336,6 +394,10 @@
         private System.Windows.Forms.Label labelPlayer3;
         private System.Windows.Forms.Label labelConectados;
         private System.Windows.Forms.DataGridView dataGridViewConectados;
+        private System.Windows.Forms.Label labelUsuario;
+        private System.Windows.Forms.Label labelSala;
+        private System.Windows.Forms.Button buttonAbandonar;
+        private System.Windows.Forms.Button buttonCrearSala;
     }
 }
 
