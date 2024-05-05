@@ -42,6 +42,9 @@ namespace WindowsFormsApplication1
 
             // Suscribirse al evento CellDoubleClick del DataGridView
             dataGridViewConectados.CellDoubleClick += DataGridViewConectados_CellDoubleClick;
+
+            // Evento Intro en el textBox del chat
+            textBoxChat.KeyDown += textBoxChat_KeyDown;
         }
         public void GuardaCarta(string mensaje)
         {
@@ -199,6 +202,8 @@ namespace WindowsFormsApplication1
                                 buttonCrearSala.Visible = false; // Ya no podemos crear sala si nos metemos en una
                                 buttonAbandonar.Visible = true;
                                 buttonAbandonar.Location = new Point(560, 26);
+                                textBoxChat.Visible = true;
+                                richTextBoxChat.Visible = true;
                             }));
                         }
                         break;
@@ -244,6 +249,9 @@ namespace WindowsFormsApplication1
                             {
                                 labelYourCards.Text = jugadores[0];
                                 labelYourCards.Visible = true;
+                                labelPlayer2.Visible = false;
+                                labelPlayer3.Visible = false;
+                                labelPlayer4.Visible = false;
                             }));
                             if (numJugadores > 1)
                             {
@@ -251,7 +259,8 @@ namespace WindowsFormsApplication1
                                 {
                                     labelPlayer2.Text = jugadores[1];
                                     labelPlayer2.Visible = true;
-
+                                    labelPlayer3.Visible = false;
+                                    labelPlayer4.Visible = false;
                                 }));
                                 if (numJugadores > 2)
                                 {
@@ -259,6 +268,7 @@ namespace WindowsFormsApplication1
                                     {
                                         labelPlayer3.Text = jugadores[2];
                                         labelPlayer3.Visible = true;
+                                        labelPlayer4.Visible = false;
 
                                     }));
                                     if (numJugadores == 4)
@@ -273,6 +283,37 @@ namespace WindowsFormsApplication1
                                 }
                             }
                         }
+                        break;
+
+                    case 15:
+                        richTextBoxChat.Invoke(new Action(() =>
+                        {
+                            richTextBoxChat.Clear(); // Reiniciamos el chat
+                        }));
+                        if (trozos.Length > 0)
+                        {
+                            // Obtenemos numero de mensajes
+                            int numMensajes = Convert.ToInt32(trozos[1]);
+
+                            for (int i = 1; i <= numMensajes; i++)
+                            {
+                                // Agrega cada mensaje al RichTextBox
+                                richTextBoxChat.Invoke(new Action(() =>
+                                {
+                                    // Los mensajes empiezan en trozos[2]
+                                    richTextBoxChat.AppendText(trozos[i + 1] + "\n"); // Agrega un salto de línea después de cada mensaje
+                                }));
+                            }
+                        }
+                        else
+                        {
+                            // El mensaje recibido está vacío
+                            richTextBoxChat.Invoke(new Action(() =>
+                            {
+                                richTextBoxChat.AppendText("Mensaje vacío: no se recibieron datos del chat\n");
+                            }));
+                        }
+
                         break;
                 }
             }
@@ -292,6 +333,8 @@ namespace WindowsFormsApplication1
                 buttonAbandonar.Visible = true;
                 labelSala.Text = "Sala: " + sala.ToString();
                 labelSala.Visible = true;
+                richTextBoxChat.Visible = true;
+                textBoxChat.Visible = true;
                 MessageBox.Show("Ya podeis empezar partida!");
             }));
             enSala = true;
@@ -484,6 +527,7 @@ namespace WindowsFormsApplication1
             server.Send(msg);
         }
         bool partidaEmpezada = false;
+        int[] cartas = new int[20];
         private void EmpezarPartida_Click(object sender, EventArgs e)
         {
             if (conectado && !partidaEmpezada && enSala)
@@ -494,7 +538,6 @@ namespace WindowsFormsApplication1
                 labelYourCards.Visible = true; // Mostramos el label de las cartas del jugador
 
                 // Repartimos Cartas Iniciales
-                int[] cartas = new int[20]; // en este vector se guarda los id de las cartas, max 20 cartas
 
                 for (int i = 0; i < 7; i++) // Se escogen 7 cartas iniciales al azar
                 {
@@ -559,6 +602,8 @@ namespace WindowsFormsApplication1
                     MessageBox.Show("Error al buscar usuario");
                 }*/
 
+                // Mostramos boton para pedir carta
+                buttonPedirCarta.Visible = true;
             }
             else if (partidaEmpezada)
             {
@@ -599,8 +644,11 @@ namespace WindowsFormsApplication1
             buttonAbandonar.Visible = false;
             buttonCrearSala.Visible = true;
             labelSala.Visible = false;
+            labelYourCards.Visible = false;
+            labelPlayer2.Visible = false;
+            labelPlayer3.Visible = false;
+            labelPlayer4.Visible = false;
         }
-
         private void buttonCrearSala_Click(object sender, EventArgs e)
         {
             // Enviamos al server peticion para unirnos a una sala
@@ -610,6 +658,95 @@ namespace WindowsFormsApplication1
             server.Send(msg);
 
             enSala = true;
+        }
+        private void textBoxChat_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Verifica si se presionó la tecla "Enter"
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Eliminar sonido
+                e.SuppressKeyPress = true;
+
+                // Envía el texto al servidor
+                string mensaje = "15/" + usuario + "/" + textBoxChat.Text; // Pasamos mensaje
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+
+                // Limpia el TextBox
+                textBoxChat.Clear(); 
+
+                // Indica que el evento ha sido manejado
+                e.Handled = true;
+            }
+        }
+
+        private void richTextBoxChat_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonPedirCarta_Click(object sender, EventArgs e)
+        {
+            if (conectado && partidaEmpezada && enSala)
+            {
+                // Contador para llevar el registro del número de posiciones no nulas
+                int posicion = 0;
+
+                // Recorre el vector y cuenta las posiciones no nulas
+                for (int i = 0; i < cartas.Length; i++)
+                {
+                    if (cartas[i] != 0) // Verifica si la posición no es nula
+                    {
+                        posicion++; // Incrementa el contador
+                    }
+                }
+
+                PideCarta(); // Pedimos carta al server
+                while (!nuevaCarta) // hasta que no nos llegue una nueva carta
+                {
+                    cartas[posicion] = numCartaRandom;
+                }
+                nuevaCarta = false;
+                while (cartas[posicion] == 53 || cartas[posicion] == 40 || cartas[posicion] == 27 || cartas[posicion] == 14) // Aún no tenemos cartas 0
+                {
+                    PideCarta(); // Pedimos carta al server
+                    while (!nuevaCarta) // hasta que no nos llegue una nueva carta
+                    {
+                        cartas[posicion] = numCartaRandom;
+                    }
+                    nuevaCarta = false;
+                }
+
+                // Mostramos al cliente la carta que le ha tocado
+
+                PictureBox pictureBox = new PictureBox();
+                pictureBox.Location = new Point(posicion * 100 + 450, 600); // Alinear horizontalmente
+                pictureBox.Size = new Size(80, 120); // Tamaño de la carta
+                pictureBox.SizeMode = PictureBoxSizeMode.StretchImage; // Ajustar tamaño de imagen
+                Controls.Add(pictureBox);
+
+                // Cargar la imagen de la carta
+                string rutaImagen = Path.Combine("Images", "cards", cartas[posicion] + ".png");
+                if (File.Exists(rutaImagen))
+                {
+                    pictureBox.Image = Image.FromFile(rutaImagen);
+                }
+                else
+                {
+                    // Si la imagen no se encuentra, mostrar un mensaje en el PictureBox
+                    pictureBox.BackColor = Color.Gray;
+                    pictureBox.BorderStyle = BorderStyle.FixedSingle;
+                    pictureBox.Text = "Imagen no encontrada";
+                }
+            }
+            else if (!partidaEmpezada)
+            {
+                MessageBox.Show("No has empezado partida");
+            }
+            else if (!conectado)
+            {
+                MessageBox.Show("You must be connected in order to send messages to the server");
+            }
         }
     }
 }

@@ -15,16 +15,24 @@ verificada por Joan Fusté
 comunicada por Emmanuel Alonso Mendoza Cobeña
 URL:  https://youtu.be/1AZkg6WifUQ   https://youtu.be/JM-loKVtLuA
 
-Verision 3
+Version 3
 
 generado por Joan Fusté
 Verificada por Emmanuel Alonso Mendoza Cobeña
 comunicada por Pol Miró
 URL: https://youtu.be/DkznW4e-Q5Q
 
-Verision 4
+Version 4
 
 generado por Pol Miró
+Verificada por Joan Fusté 
+Comunicada por Emmanuel Alonso Mendoza Cobeña 
+URL: https://youtu.be/fqNjztHip9U
+
+Version 5
+
+generado por Pol Miró
+
 
 Pendiente (Requisitos a implementar en esta versión)
 
@@ -32,14 +40,16 @@ Pendiente (Requisitos a implementar en esta versión)
 
 Avances (Requisitos del proyecto):
 
--Invitar a otros conectados + aceptar/rechazar + empezar partida (crear salas)
+-Chat jugadores
+
+-Pedir carta
 
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
--
+-Al empezar la partida ya no se van los nombres de los compañeros de sala
 
 Errores detectados:
 
--
+-Error al bind a veces, se soluciona esperando
 
 

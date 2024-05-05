@@ -8,6 +8,8 @@
 #include <mysql.h>
 #include <pthread.h>
 
+#define MAX_MENSAJES 10000 // Máximo número de mensajes del chat
+
 int contador;
 
 //Estructura necesaria para acceso excluyente
@@ -30,6 +32,12 @@ typedef struct
 
 ListaConectados miListaConectados;
 
+// Estructura del chat
+typedef struct {
+    char *mensajes[MAX_MENSAJES]; // Puntero definido para poder tener mensajes de longitud variable
+    int numMensajes;
+} Chat;
+
 // Lista de Salas
 typedef struct
 {
@@ -39,6 +47,7 @@ typedef struct
 typedef struct
 {
     Jugador jugadores[4]; // Máximo 4 jugadores por sala
+	Chat chat;
     int num;
 } Sala;
 typedef struct
@@ -48,29 +57,56 @@ typedef struct
 } ListaSalas;
 
 ListaSalas miListaSalas;
-/*
-int PonSala(ListaSalas *lista, char usuario[20], char invitado[20])
+
+void AgregarMensaje(ListaSalas *lista, char nombre[20], char mensaje[100], int sala) 
 {
-	// Crea una sala si el usuario no estaba previamente en una, y ademas mete al jugador invitado
-	// 1 si se ha creado sala
-    int salaUsuario = BuscaSalaUsuario(lista, usuario);
-	if (salaUsuario == -1) // El usuario no está en una sala
-	{
-		// Creamos sala
-		lista->salas[lista->num].jugadores[0].nombre = usuario;
-		lista->salas[lista->num].jugadores[1].nombre = invitado;
-	}
-	else // El usuario ya estaba en una sala
-	{
-		// Metemos al invitado en la sala que estaba el usuario si el invitado no esta en una sala
-		int salaInvitado = BuscaSalaUsuario(lista, invitado);
-		if (salaInvitado == -1) // El invitado no estaba en ninguna sala
-		{
-			int posicion = lista->salas[salaUsuario].num
-			lista->salas[salaUsuario].jugadores[lista->salas[salaUsuario].num].nombre = invitado; // Metemos al invitado en la siguiente posición
-		}
-	}
-} */
+    // Verifica si el número de sala está dentro del rango
+    // Verifica si el número de sala está dentro del rango
+    if (sala >= 0 && sala < lista->num) {
+        // Verifica si el chat de la sala no está lleno
+        if (lista->salas[sala].chat.numMensajes < MAX_MENSAJES) {
+            // Agrega el mensaje al chat de la sala de la forma "Nombre: mensaje"
+
+			// Cambiamos el mensaje con el formato correcto
+			char mensajeBuff[100];
+			strcpy(mensajeBuff,mensaje);
+			sprintf(mensaje, "%s: %s", nombre, mensajeBuff);
+            Chat *chatSala = &lista->salas[sala].chat;
+            chatSala->mensajes[chatSala->numMensajes] = malloc(strlen(mensaje) + 1); // Gestión de memoria
+            strcpy(chatSala->mensajes[chatSala->numMensajes], mensaje);
+			printf("El mensaje %s se ha introducido en el chat de la sala %d\n", chatSala->mensajes[chatSala->numMensajes], sala);
+            chatSala->numMensajes++;
+        } else {
+            printf("El chat de la sala %s está lleno\n", nombre);
+        }
+    } else {
+        printf("La sala %d no existe\n", sala);
+    }
+}
+void DameChat(ListaSalas *lista, char chat[1000000], int sala)
+{
+	// Devuelve el chat en forma (num mensajes)/(mensaje 1)/(mensaje 2)
+
+	// Verifica si el índice de la sala está dentro del rango
+    if (sala >= 0 && sala < lista->num) {
+        // Obtiene el chat de la sala específica
+        Chat *chatSala = &lista->salas[sala].chat;
+
+        // Inicializa el chat como una cadena vacía
+        chat[0] = '\0';
+		
+		// Concatena el número de mensajes al inicio de la cadena
+        sprintf(chat, "%d/", chatSala->numMensajes);
+
+        // Concatena todos los mensajes del chat en la cadena proporcionada
+        for (int i = 0; i < chatSala->numMensajes; i++) {
+            strcat(chat, chatSala->mensajes[i]); // Metemos el siguiente mensaje
+            strcat(chat, "/"); // Agrega un separador "/" después de cada mensaje
+        }
+    } else {
+        printf("La sala no existe\n");
+    }
+}
 int CreaSala(ListaSalas *lista, char usuario[20])
 {
 	// Crea una sala si el usuario no esta ya en una sala
@@ -112,6 +148,8 @@ int PonUsuarioSala(ListaSalas *lista, char usuario[20], int sala)
 	int posicion = lista->salas[sala].num; // Buscamos la posicion en la que hay que meter a cada jugador
 	strcpy(lista->salas[sala].jugadores[posicion].nombre,usuario); // Guardamos el nombre
 	lista->salas[sala].num++; // Sumamos 1 al numero de jugadores en esa sala
+
+	printf("Se ha metido a %s en la sala %d\n", usuario, sala);
 	return 0;
 }
 int SacaUsuarioSala(ListaSalas *lista, char usuario[20])
@@ -143,7 +181,7 @@ int SacaUsuarioSala(ListaSalas *lista, char usuario[20])
 }
 int BuscaSalaUsuario(ListaSalas *lista, char usuario[20])
 {
-	// Busca a un usuario en la lista de salas
+	// Busca la sala en la que se encuentra un usuario
 	// -1 si no lo encuentra
 	// x si lo encuentra, siendo x la sala en la que está
 
@@ -157,6 +195,7 @@ int BuscaSalaUsuario(ListaSalas *lista, char usuario[20])
 		while (j < lista->salas[i].num && !encontrado) // Buscamos entre todos los jugadores
 		{
 			if (strcmp(lista->salas[i].jugadores[j].nombre, usuario) == 0) encontrado = 1;
+			j++;
 		}
 		if (!encontrado) i++; // si no lo encontramos pasamos a la siguiente sala
 	}
@@ -191,12 +230,12 @@ void DameJugadores(ListaSalas *lista, char jugadores[800], int sala)
 
     sprintf(jugadores, "%d", lista->salas[sala].num);
     if (lista->num == 0) printf("No queda nadie en la sala %d\n", sala);
-    for (int i = 0; i < lista->salas[sala].num + 1; i++)
+    for (int i = 0; i < lista->salas[sala].num; i++)
     {
 		sprintf(jugadores, "%s/%s",jugadores, lista->salas[sala].jugadores[i].nombre);
 		printf("%s esta en sala\n", lista->salas[sala].jugadores[i].nombre);
     }
-	printf("%s\n",jugadores);
+	printf("DameJugadores: %s\n",jugadores);
 }
 
 int Pon(ListaConectados *lista, char nombre[20], int socket)
@@ -398,10 +437,8 @@ void *AtenderCliente(void *socket)
 	char nombre[20] = "\0";
 	char password[20];
 
-	char nombreUsuario[20] = "\0";
-	char nombreInvitado[20] = "\0";
 	int sala;
-
+	char mensajeChat[100] = "\0";
 
 	char conectados[800];
 	char jugadores[800];
@@ -422,27 +459,33 @@ void *AtenderCliente(void *socket)
 		int codigo =  atoi (p);
 		printf("Codigo: %d\n",codigo);
 		
-		if (codigo != 0 && codigo < 4) // Codigo 0 es desconectar, codigo > 4 no hace falta nombre ni password 
+		if (codigo != 0 && codigo < 4 || codigo >= 10) // Codigo 0 es desconectar, codigo > 4 no hace falta nombre ni password en todos 
 		{
 			p = strtok( NULL, "/");
 			strcpy (nombre, p);
 
-			p = strtok( NULL, "/");
-			strcpy (password, p);
-
-			printf ("Codigo: %d, Nombre: %s Password: %s\n", codigo, nombre, password);
-		}
-		else if (codigo == 10 || codigo == 11 || codigo == 12 || codigo == 13)
-		{
-			p = strtok( NULL, "/");
-			strcpy (nombreUsuario, p);
-			printf("Usuario: %s\n", nombreUsuario);
-
-		 	if (codigo != 12 && codigo != 10)
+			if (codigo != 0 && codigo < 4)
 			{
 				p = strtok( NULL, "/");
-				sala = atoi(p);
-				printf("Sala: %d\n", sala);
+				strcpy (password, p);
+				printf ("Codigo: %d, Nombre: %s Password: %s\n", codigo, nombre, password);
+			}
+			else if(codigo > 10)
+			{
+				printf("Usuario: %s\n", nombre);
+
+				if (codigo != 12 && codigo != 10 && codigo != 15)
+				{
+					p = strtok( NULL, "/");
+					sala = atoi(p);
+					printf("Sala: %d\n", sala);
+				}
+				else if (codigo == 15)
+				{
+					p = strtok( NULL, "/");
+					strcpy (mensajeChat, p);
+					printf("Mensaje Chat: %s\n", mensajeChat);
+				}
 			}
 		}
 		if (codigo == 0) // Peticion de desconexion
@@ -747,8 +790,8 @@ void *AtenderCliente(void *socket)
         		semillaInicializada = 1;
    			}
 
-    		// Generar un número aleatorio entre 0 y 52
-    		int rnd = rand() % 53;
+    		// Generar un número aleatorio entre 1 y 53
+    		int rnd = (rand() % 53) + 1;;
 
     		// Guardar el número aleatorio en Respuesta
     		sprintf(respuesta, "8/%d", rnd);
@@ -759,7 +802,7 @@ void *AtenderCliente(void *socket)
 		else if (codigo == 10) // Crear sala
 		{
 			// Usuario crea una sala en la que va a poder invitar a conectados
-			sala = CreaSala(&miListaSalas, nombreUsuario);
+			sala = CreaSala(&miListaSalas, nombre);
 			if (sala == -1) sprintf(respuesta, "10/-1");
 			else sprintf(respuesta, "10/%d", sala);
 		}
@@ -767,7 +810,7 @@ void *AtenderCliente(void *socket)
 		{
 			// Enviamos notificación de invitación al invitado con todos los nombres de los jugadores en la sala
 			// 11/(int numero de sala)/(int numero de jugadores)/Pol/Joan/Alonso
-			int posicion = DamePosicion(&miListaConectados, nombreUsuario); // Buscamos al usuario invitado
+			int posicion = DamePosicion(&miListaConectados, nombre); // Buscamos al usuario invitado
 			int socketInvitado = miListaConectados.conectados[posicion].socket;
 
 			DameJugadores(&miListaSalas, jugadores, sala);
@@ -778,19 +821,35 @@ void *AtenderCliente(void *socket)
 		}
 		else if (codigo == 12) // Abandonar sala
 		{
-			SacaUsuarioSala(&miListaSalas, nombreUsuario);
+			SacaUsuarioSala(&miListaSalas, nombre);
+			// Enviamos notificacion a todos los usuarios conectados a esa sala
+			// Les damos los nombres de los jugadores que hay conectados
+
+			for (int i = 0; i < miListaSalas.salas[sala].num; i++) // Para cada jugador en la sala
+			{
+				printf("Buscamos al jugador %s\n", miListaSalas.salas[sala].jugadores[i].nombre);
+				int posicion = DamePosicion(&miListaConectados, &miListaSalas.salas[sala].jugadores[i].nombre); // Buscamos jugador en conectados
+				int socketJugador = miListaConectados.conectados[posicion].socket; // Buscamos su socket
+
+				DameJugadores(&miListaSalas, jugadores, sala);
+				
+				sprintf(notificacionSala, "14/%d", sala);
+				sprintf(notificacionSala, "%s/%s", notificacionSala, jugadores);
+				printf("Notificacion sala: %s", notificacionSala);
+				write (socketJugador, notificacionSala, strlen(notificacionSala));
+			}
 		}
 		else if (codigo == 13) // Entrar a sala
 		{
-			PonUsuarioSala(&miListaSalas, nombreUsuario, sala);
+			PonUsuarioSala(&miListaSalas, nombre, sala);
 
 			// Enviamos notificacion a todos los usuarios conectados a esa sala
 			// Les damos los nombres de los jugadores que hay conectados
 
-			for (int i = 0; i < miListaSalas.salas[sala].num + 1; i++) // Para cada jugador en la sala
+			for (int i = 0; i < miListaSalas.salas[sala].num; i++) // Para cada jugador en la sala
 			{
-				printf("Buscamos al jugador %s\n", miListaSalas.salas[sala].jugadores[i]);
-				int posicion = DamePosicion(&miListaConectados, &miListaSalas.salas[sala].jugadores[i]); // Buscamos jugador en conectados
+				printf("Buscamos al jugador %s\n", miListaSalas.salas[sala].jugadores[i].nombre);
+				int posicion = DamePosicion(&miListaConectados, &miListaSalas.salas[sala].jugadores[i].nombre); // Buscamos jugador en conectados
 				int socketJugador = miListaConectados.conectados[posicion].socket; // Buscamos su socket
 
 				DameJugadores(&miListaSalas, jugadores, sala);
@@ -799,9 +858,60 @@ void *AtenderCliente(void *socket)
 				sprintf(notificacionSala, "%s/%s", notificacionSala, jugadores);
 				write (socketJugador, notificacionSala, strlen(notificacionSala));
 			}
+			
+			// Enviamos el chat
+			/*
+			char jugador[20];
+			char chat[1000000]; // El chat contiene muchos char
+			chat[0] = '\0'; // Reiniciamos el chat
+			DameChat(&miListaSalas, chat, sala); // guardamos el chat de la sala en la variable
+			sprintf(notificacion, "15/%s", chat);
+			printf("Notificacion: %s\n", notificacion);
 
+			write (sock_conn, notificacion, strlen(notificacion));*/
 		}
-		if (codigo != 0 && codigo != 12 && codigo != 13)
+		else if (codigo == 15) // Mensaje de chat
+		{
+			// El usuario nos envia 15/(nombre)/(mensaje)
+
+			// Encontramos en que sala esta jugando
+			sala = BuscaSalaUsuario(&miListaSalas, nombre);
+			
+			// Guardamos el mensaje en la sala
+			AgregarMensaje(&miListaSalas, nombre, mensajeChat, sala);
+			
+			// Buscamos el nombre de todos los jugadores
+			jugadores[0] = '\0'; // Reiniciamos vector
+			DameJugadores(&miListaSalas, jugadores, sala);
+
+			// Para cada jugador encontramos su socket y le enviamos la notificacion
+			char *z = strtok( jugadores, "/");
+			int numJugadores =  atoi (z);
+			printf("Hay: %d jugadores en la sala %d\n" ,numJugadores, sala);
+
+			char jugador[20];
+			char chat[1000000]; // El chat contiene muchos char
+			chat[0] = '\0'; // Reiniciamos el chat
+			DameChat(&miListaSalas, chat, sala); // guardamos el chat de la sala en la variable
+			sprintf(notificacion, "15/%s", chat);
+			printf("Notificacion: %s\n", notificacion);
+			for (int i = 0; i < numJugadores; i++)
+			{
+				// Obtenemos nombre del jugador
+				z = strtok( NULL, "/");
+				strcpy (jugador, z);
+
+				// Buscamos el socket del jugador
+				printf("Buscamos al jugador %s\n", miListaSalas.salas[sala].jugadores[i]);
+				int posicion = DamePosicion(&miListaConectados, &miListaSalas.salas[sala].jugadores[i]); // Buscamos jugador en conectados
+				int socketJugador = miListaConectados.conectados[posicion].socket; // Buscamos su socket
+
+				write (socketJugador, notificacion, strlen(notificacion));
+				// Reiniciamos nombre
+				jugador[0] = '\0';
+			}
+		}
+		if (codigo != 0 && codigo != 11 && codigo != 12 && codigo != 13 && codigo != 15)
 		{
 			printf("Respuesta: %s\n", respuesta);
 			// Enviamos respuesta
@@ -838,7 +948,7 @@ int main(int argc, char *argv[])
 	//Bind
 	if (bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr)) < 0)
 	{
-		printf ("Posible error al bind (Si no funciona reinicia la maquina virtual)\n");
+		printf ("Error al Bind, espera 1 min y reinicia el server\n");
 		// Reiniciamos el puerto de escucha
 		//const char *comando = "fuser -k -n tcp 50010"; // fuser -k -n tcp 50010 o tambien fuser -k -n 50010/tcp ---- Producción
 		const char *comando = "fuser -k -n tcp 9050"; // fuser -k -n tcp 9050 o tambien fuser -k -n 9050/tcp ---- Desarrollo
