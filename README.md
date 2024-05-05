@@ -31,8 +31,10 @@ URL: https://youtu.be/fqNjztHip9U
 
 Version 5
 
-generado por Pol Miró
-
+generado por Pol Miró 
+Verificada por Emmanuel Alonso Mendoza Cobeña
+Comunicada por Joan Fusté 
+https://youtu.be/mXQTNODiX9Q
 
 Pendiente (Requisitos a implementar en esta versión)
 
