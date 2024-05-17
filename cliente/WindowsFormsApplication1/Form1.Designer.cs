@@ -43,7 +43,7 @@
             this.MasPartidas = new System.Windows.Forms.Button();
             this.MasELO = new System.Windows.Forms.Button();
             this.ColorCarta = new System.Windows.Forms.Button();
-            this.btnEmpezarPartida = new System.Windows.Forms.Button();
+            this.buttonEmpezarPartida = new System.Windows.Forms.Button();
             this.labelPlayer2 = new System.Windows.Forms.Label();
             this.labelPlayer4 = new System.Windows.Forms.Label();
             this.labelYourCards = new System.Windows.Forms.Label();
@@ -230,17 +230,18 @@
             this.ColorCarta.UseVisualStyleBackColor = true;
             this.ColorCarta.Click += new System.EventHandler(this.ColorCarta_Click);
             // 
-            // btnEmpezarPartida
+            // buttonEmpezarPartida
             // 
-            this.btnEmpezarPartida.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEmpezarPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEmpezarPartida.Location = new System.Drawing.Point(1230, 725);
-            this.btnEmpezarPartida.Name = "btnEmpezarPartida";
-            this.btnEmpezarPartida.Size = new System.Drawing.Size(201, 53);
-            this.btnEmpezarPartida.TabIndex = 15;
-            this.btnEmpezarPartida.Text = "Empezar partida";
-            this.btnEmpezarPartida.UseVisualStyleBackColor = true;
-            this.btnEmpezarPartida.Click += new System.EventHandler(this.EmpezarPartida_Click);
+            this.buttonEmpezarPartida.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonEmpezarPartida.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonEmpezarPartida.Location = new System.Drawing.Point(1230, 725);
+            this.buttonEmpezarPartida.Name = "buttonEmpezarPartida";
+            this.buttonEmpezarPartida.Size = new System.Drawing.Size(201, 53);
+            this.buttonEmpezarPartida.TabIndex = 15;
+            this.buttonEmpezarPartida.Text = "Empezar partida";
+            this.buttonEmpezarPartida.UseVisualStyleBackColor = true;
+            this.buttonEmpezarPartida.Visible = false;
+            this.buttonEmpezarPartida.Click += new System.EventHandler(this.EmpezarPartida_Click);
             // 
             // labelPlayer2
             // 
@@ -384,6 +385,7 @@
             this.buttonPedirCarta.TabIndex = 30;
             this.buttonPedirCarta.Text = "Pedir Carta";
             this.buttonPedirCarta.UseVisualStyleBackColor = true;
+            this.buttonPedirCarta.Visible = false;
             this.buttonPedirCarta.Click += new System.EventHandler(this.buttonPedirCarta_Click);
             // 
             // Form1
@@ -404,7 +406,7 @@
             this.Controls.Add(this.labelYourCards);
             this.Controls.Add(this.labelPlayer4);
             this.Controls.Add(this.labelPlayer2);
-            this.Controls.Add(this.btnEmpezarPartida);
+            this.Controls.Add(this.buttonEmpezarPartida);
             this.Controls.Add(this.ColorCarta);
             this.Controls.Add(this.MasELO);
             this.Controls.Add(this.MasPartidas);
@@ -439,7 +441,7 @@
         private System.Windows.Forms.Button MasPartidas;
         private System.Windows.Forms.Button MasELO;
         private System.Windows.Forms.Button ColorCarta;
-        private System.Windows.Forms.Button btnEmpezarPartida;
+        private System.Windows.Forms.Button buttonEmpezarPartida;
         private System.Windows.Forms.Label labelPlayer2;
         private System.Windows.Forms.Label labelPlayer4;
         private System.Windows.Forms.Label labelYourCards;

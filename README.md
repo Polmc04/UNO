@@ -36,6 +36,11 @@ Verificada por Emmanuel Alonso Mendoza Cobeña
 Comunicada por Joan Fusté 
 https://youtu.be/mXQTNODiX9Q
 
+Version 6
+
+generado por Pol Miró
+
+
 
 Pendiente (Requisitos a implementar en esta versión)
 
@@ -43,16 +48,13 @@ Pendiente (Requisitos a implementar en esta versión)
 
 Avances (Requisitos del proyecto):
 
--Chat jugadores
-
--Pedir carta
+-
 
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
--Al empezar la partida ya no se van los nombres de los compañeros de sala
+- Cartas 0 añadidas
+- Cartas ya se procesan bien en el cliente
 
 Errores detectados:
 
--Error al bind a veces, se soluciona esperando
-
-
+-

@@ -790,8 +790,8 @@ void *AtenderCliente(void *socket)
         		semillaInicializada = 1;
    			}
 
-    		// Generar un número aleatorio entre 1 y 53
-    		int rnd = (rand() % 53) + 1;;
+    		// Generar un número aleatorio entre 1 y 54
+    		int rnd = (rand() % 54) + 1;
 
     		// Guardar el número aleatorio en Respuesta
     		sprintf(respuesta, "8/%d", rnd);

@@ -46,11 +46,6 @@ namespace WindowsFormsApplication1
             // Evento Intro en el textBox del chat
             textBoxChat.KeyDown += textBoxChat_KeyDown;
         }
-        public void GuardaCarta(string mensaje)
-        {
-            numCartaRandom = Convert.ToInt32(mensaje);
-            nuevaCarta = true;
-        }
         private void AtenderServidor()
         {
             while (true)
@@ -466,6 +461,8 @@ namespace WindowsFormsApplication1
                 dataGridViewConectados.Visible = false;
                 labelUsuario.Visible = false;
                 sesionIniciada = false;
+                buttonPedirCarta.Visible = false;
+                buttonEmpezarPartida.Visible = false;
             }
             else
             {
@@ -520,11 +517,15 @@ namespace WindowsFormsApplication1
         void PideCarta()
         {
             // Peticion al server de pedir una carta
-            int carta;
             string mensaje = "8/";
 
             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
             server.Send(msg);
+        }
+        public void GuardaCarta(string mensaje)
+        {
+            numCartaRandom = Convert.ToInt32(mensaje);
+            nuevaCarta = true;
         }
         bool partidaEmpezada = false;
         int[] cartas = new int[20];
@@ -536,6 +537,7 @@ namespace WindowsFormsApplication1
                 labelYourCards.Text = usuario;
                 labelPlayer2.Text = invitado;
                 labelYourCards.Visible = true; // Mostramos el label de las cartas del jugador
+                buttonPedirCarta.Visible = true; // Mostramos boton chupar
 
                 // Repartimos Cartas Iniciales
 
@@ -546,16 +548,8 @@ namespace WindowsFormsApplication1
                     {
                         cartas[i] = numCartaRandom;
                     }
+                    cartas[i] = numCartaRandom;
                     nuevaCarta = false;
-                    while (cartas[i] == 53 || cartas[i] == 40 || cartas[i] == 27 || cartas[i] == 14) // Aún no tenemos cartas 0
-                    {
-                        PideCarta(); // Pedimos carta al server
-                        while (!nuevaCarta) // hasta que no nos llegue una nueva carta
-                        {
-                            cartas[i] = numCartaRandom;
-                        }
-                        nuevaCarta = false;
-                    }
                 }
 
                 // Mostramos al cliente las cartas que le han tocado
@@ -581,26 +575,7 @@ namespace WindowsFormsApplication1
                         pictureBox.Text = "Imagen no encontrada";
                     }
                 }
-                /* ---------------------------------------------EN DESARROLLO--------------------------------------------------------------------
-                // Mostramos a los otros jugadores
-                string[] partes = DameConectados();
-                int numConectados = int.Parse(partes[0]); // Contamos cuantos hay conectados
-                string nombreUsuario = nombre.Text;
-                int pos = -1; // posicion donde se encuentra el usuario
-                bool encontrado = false;
-                int i = 0; 
-                while (!encontrado && i < numConectados)
-                {
-                    if (partes[i + 1] == nombreUsuario) // a partir de la posicion 1 hay nombres de usuarios
-                    {
-                        encontrado = true;
-                        pos = i + 1; 
-                    }
-                }
-                if (!encontrado)
-                {
-                    MessageBox.Show("Error al buscar usuario");
-                }*/
+                
 
                 // Mostramos boton para pedir carta
                 buttonPedirCarta.Visible = true;
@@ -658,6 +633,8 @@ namespace WindowsFormsApplication1
             server.Send(msg);
 
             enSala = true;
+
+            buttonEmpezarPartida.Visible = true;
         }
         private void textBoxChat_KeyDown(object sender, KeyEventArgs e)
         {
@@ -707,15 +684,6 @@ namespace WindowsFormsApplication1
                     cartas[posicion] = numCartaRandom;
                 }
                 nuevaCarta = false;
-                while (cartas[posicion] == 53 || cartas[posicion] == 40 || cartas[posicion] == 27 || cartas[posicion] == 14) // Aún no tenemos cartas 0
-                {
-                    PideCarta(); // Pedimos carta al server
-                    while (!nuevaCarta) // hasta que no nos llegue una nueva carta
-                    {
-                        cartas[posicion] = numCartaRandom;
-                    }
-                    nuevaCarta = false;
-                }
 
                 // Mostramos al cliente la carta que le ha tocado
 
