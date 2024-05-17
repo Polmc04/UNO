@@ -36,6 +36,7 @@ Verificada por Emmanuel Alonso Mendoza Cobeña
 Comunicada por Joan Fusté 
 https://youtu.be/mXQTNODiX9Q
 
+
 Pendiente (Requisitos a implementar en esta versión)
 
 -
