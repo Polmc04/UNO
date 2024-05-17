@@ -53,6 +53,10 @@
             this.labelSala = new System.Windows.Forms.Label();
             this.buttonAbandonar = new System.Windows.Forms.Button();
             this.buttonCrearSala = new System.Windows.Forms.Button();
+            this.richTextBoxChat = new System.Windows.Forms.RichTextBox();
+            this.textBoxChat = new System.Windows.Forms.TextBox();
+            this.labelChat = new System.Windows.Forms.Label();
+            this.buttonPedirCarta = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConectados)).BeginInit();
             this.SuspendLayout();
@@ -241,7 +245,7 @@
             // labelPlayer2
             // 
             this.labelPlayer2.AutoSize = true;
-            this.labelPlayer2.Location = new System.Drawing.Point(429, 297);
+            this.labelPlayer2.Location = new System.Drawing.Point(374, 124);
             this.labelPlayer2.Name = "labelPlayer2";
             this.labelPlayer2.Size = new System.Drawing.Size(36, 13);
             this.labelPlayer2.TabIndex = 16;
@@ -251,7 +255,7 @@
             // labelPlayer4
             // 
             this.labelPlayer4.AutoSize = true;
-            this.labelPlayer4.Location = new System.Drawing.Point(429, 239);
+            this.labelPlayer4.Location = new System.Drawing.Point(374, 66);
             this.labelPlayer4.Name = "labelPlayer4";
             this.labelPlayer4.Size = new System.Drawing.Size(36, 13);
             this.labelPlayer4.TabIndex = 17;
@@ -261,7 +265,7 @@
             // labelYourCards
             // 
             this.labelYourCards.AutoSize = true;
-            this.labelYourCards.Location = new System.Drawing.Point(429, 327);
+            this.labelYourCards.Location = new System.Drawing.Point(374, 154);
             this.labelYourCards.Name = "labelYourCards";
             this.labelYourCards.Size = new System.Drawing.Size(59, 13);
             this.labelYourCards.TabIndex = 18;
@@ -271,7 +275,7 @@
             // labelPlayer3
             // 
             this.labelPlayer3.AutoSize = true;
-            this.labelPlayer3.Location = new System.Drawing.Point(429, 267);
+            this.labelPlayer3.Location = new System.Drawing.Point(374, 94);
             this.labelPlayer3.Name = "labelPlayer3";
             this.labelPlayer3.Size = new System.Drawing.Size(36, 13);
             this.labelPlayer3.TabIndex = 19;
@@ -338,11 +342,59 @@
             this.buttonCrearSala.Visible = false;
             this.buttonCrearSala.Click += new System.EventHandler(this.buttonCrearSala_Click);
             // 
+            // richTextBoxChat
+            // 
+            this.richTextBoxChat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBoxChat.Location = new System.Drawing.Point(1183, 510);
+            this.richTextBoxChat.Name = "richTextBoxChat";
+            this.richTextBoxChat.ReadOnly = true;
+            this.richTextBoxChat.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.richTextBoxChat.Size = new System.Drawing.Size(248, 126);
+            this.richTextBoxChat.TabIndex = 27;
+            this.richTextBoxChat.Text = "";
+            this.richTextBoxChat.Visible = false;
+            this.richTextBoxChat.TextChanged += new System.EventHandler(this.richTextBoxChat_TextChanged);
+            // 
+            // textBoxChat
+            // 
+            this.textBoxChat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxChat.Location = new System.Drawing.Point(1183, 642);
+            this.textBoxChat.Name = "textBoxChat";
+            this.textBoxChat.Size = new System.Drawing.Size(248, 20);
+            this.textBoxChat.TabIndex = 28;
+            this.textBoxChat.Visible = false;
+            // 
+            // labelChat
+            // 
+            this.labelChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelChat.Location = new System.Drawing.Point(1179, 477);
+            this.labelChat.Name = "labelChat";
+            this.labelChat.Size = new System.Drawing.Size(92, 20);
+            this.labelChat.TabIndex = 29;
+            this.labelChat.Text = "Chat";
+            this.labelChat.Visible = false;
+            // 
+            // buttonPedirCarta
+            // 
+            this.buttonPedirCarta.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonPedirCarta.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonPedirCarta.Location = new System.Drawing.Point(1183, 425);
+            this.buttonPedirCarta.Name = "buttonPedirCarta";
+            this.buttonPedirCarta.Size = new System.Drawing.Size(108, 35);
+            this.buttonPedirCarta.TabIndex = 30;
+            this.buttonPedirCarta.Text = "Pedir Carta";
+            this.buttonPedirCarta.UseVisualStyleBackColor = true;
+            this.buttonPedirCarta.Click += new System.EventHandler(this.buttonPedirCarta_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1443, 790);
+            this.Controls.Add(this.buttonPedirCarta);
+            this.Controls.Add(this.labelChat);
+            this.Controls.Add(this.textBoxChat);
+            this.Controls.Add(this.richTextBoxChat);
             this.Controls.Add(this.buttonCrearSala);
             this.Controls.Add(this.buttonAbandonar);
             this.Controls.Add(this.labelSala);
@@ -398,6 +450,10 @@
         private System.Windows.Forms.Label labelSala;
         private System.Windows.Forms.Button buttonAbandonar;
         private System.Windows.Forms.Button buttonCrearSala;
+        private System.Windows.Forms.RichTextBox richTextBoxChat;
+        private System.Windows.Forms.TextBox textBoxChat;
+        private System.Windows.Forms.Label labelChat;
+        private System.Windows.Forms.Button buttonPedirCarta;
     }
 }
 
