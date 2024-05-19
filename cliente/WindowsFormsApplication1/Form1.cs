@@ -716,5 +716,20 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("You must be connected in order to send messages to the server");
             }
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Mensaje de desconexión
+            string mensaje = "0/";
+
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+
+            // Nos desconectamos
+            atender.Abort();
+            this.BackColor = Color.Gray;
+            server.Shutdown(SocketShutdown.Both);
+            server.Close();
+        }
     }
 }

@@ -41,10 +41,10 @@ Version 6
 generado por Pol Miró
 
 
-
 Pendiente (Requisitos a implementar en esta versión)
 
--
+-Juego Funcional
+-Múltiples Jugadores en un mismo cliente (abrir tantos forms como queramos "en un mismo visual")
 
 Avances (Requisitos del proyecto):
 
@@ -52,8 +52,7 @@ Avances (Requisitos del proyecto):
 
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
-- Cartas 0 añadidas
-- Cartas ya se procesan bien en el cliente
+- 
 
 Errores detectados:
 
