@@ -152,3 +152,16 @@ C:\Users\polmi\OneDrive\Escritorio\Uni\Q4\SO\Proyecto\Versiones\VersionActual\UN
 C:\Users\polmi\OneDrive\Escritorio\Uni\Q4\SO\Proyecto\Versiones\VersionActual\UNO\cliente\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.CoreCompileInputs.cache
 C:\Users\polmi\OneDrive\Escritorio\Uni\Q4\SO\Proyecto\Versiones\VersionActual\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Users\polmi\OneDrive\Escritorio\Uni\Q4\SO\Proyecto\Versiones\VersionActual\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.AssemblyReference.cache
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.FormInvitar.resources
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.FormMenu.resources
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.FormAceptarInvitacion.resources
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.cache
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.CoreCompileInputs.cache
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\polmi\Desktop\UNO\cliente\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb

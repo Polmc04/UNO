@@ -421,7 +421,7 @@ void *AtenderCliente(void *socket)
 	}
 
 	//conn = mysql_real_connect (conn, "shiva2.upc.es","root", "mysql", "M03_BBDD", 0, NULL, 0); // Producción
-	conn = mysql_real_connect (conn, "localhost","root", "mysql", "BBDD", 0, NULL, 0); // Desarrollo
+	conn = mysql_real_connect (conn, "localhost","root", "mysql", "M03_BBDD", 0, NULL, 0); // Desarrollo
 	if (conn==NULL) 
 	{
 		printf ("Error al inicializar la conexion: %u %s\n",

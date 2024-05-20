@@ -718,18 +718,24 @@ namespace WindowsFormsApplication1
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
+        { // if conectado
             //Mensaje de desconexión
-            string mensaje = "0/";
+            if(conectado)
+            {
+                string mensaje = "0/";
 
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-            server.Send(msg);
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
 
-            // Nos desconectamos
-            atender.Abort();
+                atender.Abort();
+                server.Shutdown(SocketShutdown.Both);
+                server.Close();
+
+            }
+             // Nos desconectamos
+            
             this.BackColor = Color.Gray;
-            server.Shutdown(SocketShutdown.Both);
-            server.Close();
+           
         }
     }
 }
