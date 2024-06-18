@@ -36,23 +36,26 @@ Verificada por Emmanuel Alonso Mendoza Cobeña
 Comunicada por Joan Fusté 
 https://youtu.be/mXQTNODiX9Q
 
+Version 6
+
+generado por Emmanuel Alonso Mendoza Cobeña
+Verificada por Joan Fusté
+Comunicada por Pol Miró 
+https://www.youtube.com/watch?v=_9nPh8zSu_k      <=== VIDEO FINAL
 
 Pendiente (Requisitos a implementar en esta versión)
 
--
+-Juego Funcional
+-Múltiples Jugadores en un mismo cliente (abrir tantos forms como queramos "en un mismo visual")
 
 Avances (Requisitos del proyecto):
 
--Chat jugadores
-
--Pedir carta
+-
 
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 
--Al empezar la partida ya no se van los nombres de los compañeros de sala
+- 
 
 Errores detectados:
 
--Error al bind a veces, se soluciona esperando
-
-
+-

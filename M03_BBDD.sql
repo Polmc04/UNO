@@ -4,13 +4,13 @@ CREATE DATABASE M03_BBDD;
 USE M03_BBDD;
 
 CREATE TABLE Jugadores (
-	Identificador INTEGER PRIMARY KEY NOT NULL,
-	Nombre TEXT NOT NULL,
-	Password TEXT NOT NULL,
-	Jugadas INTEGER NOT NULL,
-	Ganadas INTEGER NOT NULL,
-	ELO INTEGER NOT NULL
-)ENGINE = InnoDB;
+    Identificador INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Nombre TEXT NOT NULL,
+    Password TEXT NOT NULL,
+    Jugadas INTEGER NOT NULL,
+    Ganadas INTEGER NOT NULL,
+    ELO INTEGER NOT NULL
+) ENGINE = InnoDB;
 
 CREATE TABLE Ranking (
 	Posicion INTEGER NOT NULL,
@@ -19,13 +19,21 @@ CREATE TABLE Ranking (
 )ENGINE = InnoDB;
 
 CREATE TABLE Partida (
-	Identificador INTEGER PRIMARY KEY NOT NULL,
-	Fecha TEXT NOT NULL,
-	Hora TEXT NOT NULL,
-	Duracion INTEGER NOT NULL,
-	Ganador INTEGER NOT NULL,
-	FOREIGN KEY (Ganador) REFERENCES Jugadores(Identificador)
-)ENGINE = InnoDB;
+    Identificador INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Fecha DATE NOT NULL,
+    Hora TIME NOT NULL,
+    Duracion INTEGER NOT NULL,
+    Ganador INTEGER NOT NULL,
+    FOREIGN KEY (Ganador) REFERENCES Jugadores(Identificador)
+) ENGINE = InnoDB;
+
+CREATE TABLE Partida_Jugadores (
+    PartidaID INTEGER NOT NULL,
+    JugadorID INTEGER NOT NULL,
+    PRIMARY KEY (PartidaID, JugadorID),
+    FOREIGN KEY (PartidaID) REFERENCES Partida(Identificador),
+    FOREIGN KEY (JugadorID) REFERENCES Jugadores(Identificador)
+) ENGINE = InnoDB;
 
 CREATE TABLE Cartas (
 	Identificador INTEGER PRIMARY KEY NOT NULL,	
@@ -98,14 +106,44 @@ INSERT INTO Jugadores VALUES(3,'Nano','6b86b273ff', 69, 0, 250);
 INSERT INTO Jugadores VALUES(4,'Angustias','6b86b273ff', 43, 42, 2250);
 INSERT INTO Jugadores VALUES(5,'Dolores','6b86b273ff', 43, 1, 50);
 
-INSERT INTO Partida VALUES(1,'24/02/2024','11:11',53,1);
-INSERT INTO Partida VALUES(2,'21/09/2021','09:54',21,3);
-INSERT INTO Partida VALUES(3,'03/12/2023','18:52',74,1);
-INSERT INTO Partida VALUES(4,'22/05/2023','21:00',12,4);
-INSERT INTO Partida VALUES(5,'16/10/2023','22:32',5,5);
+INSERT INTO Partida VALUES(1,'2020-06-18','14:30:00',53,1);
+INSERT INTO Partida VALUES(2,'2020-11-18','14:30:00',21,3);
+INSERT INTO Partida VALUES(3,'2021-02-18','14:30:00',74,1);
+INSERT INTO Partida VALUES(4,'2022-12-19','14:30:00',12,4);
+INSERT INTO Partida VALUES(5,'2024-06-10','14:30:00',5,5);
 
 INSERT INTO Ranking VALUES(1,1);
 INSERT INTO Ranking VALUES(2,5);
 INSERT INTO Ranking VALUES(3,4);
 INSERT INTO Ranking VALUES(4,3);
 INSERT INTO Ranking VALUES(5,2);
+
+-- Partida 1: Jugadores 1, 2, 3, 4
+INSERT INTO Partida_Jugadores VALUES (1, 1);
+INSERT INTO Partida_Jugadores VALUES (1, 2);
+INSERT INTO Partida_Jugadores VALUES (1, 3);
+INSERT INTO Partida_Jugadores VALUES (1, 4);
+
+-- Partida 2: Jugadores 2, 3, 4, 5
+INSERT INTO Partida_Jugadores VALUES (2, 2);
+INSERT INTO Partida_Jugadores VALUES (2, 3);
+INSERT INTO Partida_Jugadores VALUES (2, 4);
+INSERT INTO Partida_Jugadores VALUES (2, 5);
+
+-- Partida 3: Jugadores 1, 3, 4, 5
+INSERT INTO Partida_Jugadores VALUES (3, 1);
+INSERT INTO Partida_Jugadores VALUES (3, 3);
+INSERT INTO Partida_Jugadores VALUES (3, 4);
+INSERT INTO Partida_Jugadores VALUES (3, 5);
+
+-- Partida 4: Jugadores 1, 2, 3, 4
+INSERT INTO Partida_Jugadores VALUES (4, 1);
+INSERT INTO Partida_Jugadores VALUES (4, 2);
+INSERT INTO Partida_Jugadores VALUES (4, 3);
+INSERT INTO Partida_Jugadores VALUES (4, 4);
+
+-- Partida 5: Jugadores 2, 3, 4, 5
+INSERT INTO Partida_Jugadores VALUES (5, 2);
+INSERT INTO Partida_Jugadores VALUES (5, 3);
+INSERT INTO Partida_Jugadores VALUES (5, 4);
+INSERT INTO Partida_Jugadores VALUES (5, 5);

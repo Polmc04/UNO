@@ -73,6 +73,16 @@ namespace WindowsFormsApplication1.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _03f076a3_e0d4_4c2c_80ec_e94482a7bf45 {
+            get {
+                object obj = ResourceManager.GetObject("_03f076a3-e0d4-4c2c-80ec-e94482a7bf45", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _1 {
             get {
                 object obj = ResourceManager.GetObject("1", resourceCulture);
@@ -463,6 +473,16 @@ namespace WindowsFormsApplication1.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _47281f0b_b100_4280_8a41_7913b416e9f6 {
+            get {
+                object obj = ResourceManager.GetObject("_47281f0b-b100-4280-8a41-7913b416e9f6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _48 {
             get {
                 object obj = ResourceManager.GetObject("48", resourceCulture);
@@ -556,6 +576,36 @@ namespace WindowsFormsApplication1.Properties {
         internal static System.Drawing.Bitmap _9 {
             get {
                 object obj = ResourceManager.GetObject("9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _cad35566_f31b_49ec_875d_bdb0f57f266e {
+            get {
+                object obj = ResourceManager.GetObject("_cad35566-f31b-49ec-875d-bdb0f57f266e", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _cad35566_f31b_49ec_875d_bdb0f57f266e1 {
+            get {
+                object obj = ResourceManager.GetObject("_cad35566-f31b-49ec-875d-bdb0f57f266e1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UNO_Logo {
+            get {
+                object obj = ResourceManager.GetObject("UNO_Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

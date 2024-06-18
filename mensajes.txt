@@ -1,0 +1,157 @@
+Mensajes entre cliente y servidor
+
+Cliente1---------------Servidor--------------------Cleinte2
+
+CARTA RND
+8/(sala)/nombre 
+CL1---------------------->S
+
+8/(sala)/(nueva carta)
+CL1<----------------------S
+
+
+NOTIFICACION COENCTADOS
+9/(num.con)/Conect1/conec..	 9/(num.con)/Conect1/conec...
+CL1<------------------------S----------------------> CL2
+
+
+CREAR SALA
+10/nombre 
+CL1------------------------>S
+10/(sala) 
+CL1<----------------------S
+10/-1
+CL1<----------------------S
+
+
+INVITAR
+11/(sala)/(invitado)	    11/(sala)/(numJug)/Jug1/Jug2...
+CL1----------------------->S----------------------------->CL2
+
+
+UNIRSE SALA
+						13/(sala)/(nombre)
+					 S<------------------------------CL2
+
+SALIR SALA
+						12/(sala)/(nombre)
+					 S<-----------------------------CL2
+	
+	
+NOTIFICACION EN SALA
+14/sala/numJug/Jug1/Jug2.. 14/sala/numJug/Jug1/Jug2..
+CL1<-----------------------S----------------------------->Cl2
+
+
+CHAT SALA
+15/sala/usuario/mensaje
+CL1------------------------>S
+15/sala/chat				15/sala/chat
+CL1<-----------------------S------------------------------>CL2
+
+CHAT GLOBAL
+16/usuario/mensaje
+CL1------------------------>S
+16/chat						16/chat
+CL1<-----------------------S------------------------------>CL2
+
+
+TIRAR CARTA
+7/sala/nombre/tirar(1)/id carta
+CL1----------------------->S
+
+
+RECOGER CARTA DE LA BARAJA
+7/sala/nombre/recoger(2)/id carta
+CL1----------------------->S
+				7/(sala)/(num cartas baraja)-(carta1)-(carta2)-.../(num jugadores)-(nombre jugador1)-(num cartas jugador 1)-(nombre jugador 2)-...
+CL1<-----------------------S---------------------------->CL2
+
+
+EMPEZAR PARTIDA
+17/sala
+CL1---------------------->S
+
+
+NOTIFICACION PARTIDA EMPEZADA
+17/sala						17/sala
+CL1<-----------------------S--------------------------------->CL2
+
+
+ELIMINAR DE LA BASE DE DATOS
+3/		
+CL1----------------------->S
+
+3/1			(usuario eliminado)
+CL1<-----------------------S
+
+3/2			(password incorrecto)
+CL1<-----------------------S
+
+3/3			(no existe el usuario)
+CL1<-----------------------S
+
+
+Listado de jugadores con los que he echado alguna partida
+4/nombre		
+CL1----------------------->S
+
+4/Jugador1-Jugador2...			
+CL1<-----------------------S
+
+
+Resultados de las partidas que jugué con un jugador determinado.
+5/nombre/(jugador)		
+CL1----------------------->S
+
+5/(Partida 1: 2024-02-24 a las 11:11 - Ganado: Sí ...)		
+CL1<-----------------------S
+
+
+Lista de partidas jugadas en un periodo de tiempo dado
+6/nombre/(fecha inicio)/(fecha final)		
+CL1----------------------->S
+
+6/(2020-06-18 14:30:00 53 Joan)			
+CL1<-----------------------S
+
+
+LOG IN
+2/		
+CL1----------------------->S
+
+2/1				(inicio correcto)
+CL1<-----------------------S
+
+2/2			(password incorrecto)
+CL1<-----------------------S
+
+2/3			(no existe el usuario)
+CL1<-----------------------S
+
+2/4			(ya esta conectado)
+CL1<-----------------------S
+
+2/5			(lista de conectados llena)
+CL1<-----------------------S
+
+
+SIGN UP
+1/		
+CL1----------------------->S
+
+1/1				(crear usuario)
+CL1<-----------------------S
+
+1/2			(ya existe el usuario)
+CL1<-----------------------S
+
+Desconexión de sala
+0/sala/usuario
+CL1----------------------->S
+
+Desconexión de cliente (borramos su socket)
+0/
+CL1----------------------->S
+
+
