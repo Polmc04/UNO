@@ -45,12 +45,11 @@ https://www.youtube.com/watch?v=_9nPh8zSu_k      <=== VIDEO FINAL
 
 Pendiente (Requisitos a implementar en esta versión)
 
--Juego Funcional
--Múltiples Jugadores en un mismo cliente (abrir tantos forms como queramos "en un mismo visual")
+-
 
 Avances (Requisitos del proyecto):
 
--
+- Se guarda la hora actual en la partida
 
 Mejoras (Arreglo de bugs, mejoras estéticas...):
 

@@ -71,19 +71,20 @@ typedef struct
 
 ListaSalas miListaSalas;
 
-void insertarPartida(MYSQL *conn, char *jugadores, const char *ganador) {
+void insertarPartida(MYSQL *conn, const char *jugadores, const char *ganador) {
     MYSQL_RES *res;
     MYSQL_ROW row;
     char query[1024];
 
-    // Obtener la fecha actual
+    // Obtener la fecha y hora actual
     time_t t = time(NULL);
     struct tm *tm_info = localtime(&t);
     char fecha_actual[11]; // YYYY-MM-DD
+    char hora_actual[9]; // HH:MM:SS
     strftime(fecha_actual, sizeof(fecha_actual), "%Y-%m-%d", tm_info);
+    strftime(hora_actual, sizeof(hora_actual), "%H:%M:%S", tm_info);
 
-    // Valor predeterminado para la hora y la duración
-    const char *hora_predeterminada = "00:00:00";
+    // Duración predeterminada
     const int duracion_predeterminada = 0;
 
     // Iniciar una transacción
@@ -116,7 +117,7 @@ void insertarPartida(MYSQL *conn, char *jugadores, const char *ganador) {
     // Insertar la nueva partida
     snprintf(query, sizeof(query),
              "INSERT INTO Partida (Fecha, Hora, Duracion, Ganador) VALUES ('%s', '%s', %d, %d)",
-             fecha_actual, hora_predeterminada, duracion_predeterminada, ganador_id);
+             fecha_actual, hora_actual, duracion_predeterminada, ganador_id);
 
     if (mysql_query(conn, query)) {
         finish_with_error(conn);
@@ -127,8 +128,10 @@ void insertarPartida(MYSQL *conn, char *jugadores, const char *ganador) {
 
     // Copiar jugadores a jugadores_copy
     char jugadores_copy[strlen(jugadores) + 1];
-	strcpy(jugadores_copy, jugadores);
+    strcpy(jugadores_copy, jugadores);
 
+    // Separar los nombres de los jugadores
+    char *saveptr;
     char *token = strtok(jugadores_copy, "/");
     
     // Obtener el número de jugadores
